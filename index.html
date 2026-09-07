@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="ms-Arab" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koleksi Latihan SDEA (Sijil Darjah Enam Agama)</title>
-    <!-- Memuatkan Tailwind CSS untuk penggayaan pantas dan moden -->
+    <title>كوليكسي لاتيهن SDEA (سجيل درجه انم اضام)</title>
+    <!-- Memuatkan Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Memuatkan Font Awesome untuk ikon-ikon yang menarik -->
+    <!-- Memuatkan Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Memuatkan fon Google Fonts untuk tipografi yang lebih baik -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Memuatkan fon Amiri dari Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Konfigurasi kustom Tailwind CSS -->
     <script>
@@ -17,23 +17,26 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Poppins', 'sans-serif'], // Fon utama untuk teks Melayu
-                        arabic: ['Amiri', 'serif'],       // Fon untuk tajuk atau elemen Arabik
+                        // Menggunakan Amiri sebagai fon utama untuk semua teks Jawi
+                        sans: ['Amiri', 'serif'], 
                     },
                     colors: {
-                        primary: '#10b981', // Hijau zamrud - tema agama
-                        secondary: '#047857', // Hijau lebih gelap
-                        accent: '#f59e0b',  // Kuning keemasan
-                        background: '#f3f4f6', // Kelabu cerah
+                        primary: '#10b981', // Hijau zamrud
+                        secondary: '#047857', // Hijau gelap
+                        accent: '#f59e0b',  // Kuning
+                        background: '#f3f4f6', 
                     }
                 }
             }
         }
     </script>
     
-    <!-- Sedikit CSS tambahan untuk kesan animasi dan gaya khusus -->
     <style>
-        /* Animasi fade in untuk elemen */
+        body {
+            font-size: 1.125rem; /* Besarkan sedikit teks untuk pembacaan Jawi yang lebih jelas */
+            line-height: 1.8;
+        }
+
         .fade-in {
             animation: fadeIn 0.8s ease-in-out;
         }
@@ -43,7 +46,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Kesan hover untuk kad subjek */
         .subject-card {
             transition: all 0.3s ease;
         }
@@ -54,7 +56,6 @@
             border-color: #10b981;
         }
         
-        /* Corak latar belakang berinspirasikan Islamik yang ringkas */
         .islamic-pattern {
             background-color: #047857;
             background-image: 
@@ -69,33 +70,31 @@
 
 <body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
 
-    <!-- Pengepala Utama (Header) -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo / Nama Sistem -->
+            <div class="flex justify-between items-center h-24">
+                <!-- Logo -->
                 <div class="flex items-center">
                     <div class="flex-shrink-0 flex items-center gap-3">
-                        <!-- Ikon Buku -->
                         <div class="bg-primary text-white p-2 rounded-lg">
                             <i class="fas fa-book-open text-xl"></i>
                         </div>
                         <div>
-                            <h1 class="text-xl font-bold text-gray-900 leading-tight">Portal Latihan</h1>
-                            <span class="text-sm font-semibold text-primary block">SDEA JOHOR</span>
+                            <h1 class="text-2xl font-bold text-gray-900 leading-tight">ڤورتل لاتيهن</h1>
+                            <span class="text-lg font-semibold text-primary block">SDEA جوهر</span>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Navigasi Desktop (Pilihan tambahan) -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="#" class="text-primary font-semibold px-3 py-2 border-b-2 border-primary">Utama</a>
-                    <a href="#senarai-subjek" class="text-gray-500 hover:text-gray-900 px-3 py-2 transition-colors">Subjek</a>
-                    <a href="#" class="text-gray-500 hover:text-gray-900 px-3 py-2 transition-colors">Tentang Kami</a>
-                    <a href="#" class="text-gray-500 hover:text-gray-900 px-3 py-2 transition-colors">Hubungi</a>
+                <!-- Navigasi Desktop -->
+                <nav class="hidden md:flex space-x-8 space-x-reverse">
+                    <a href="#" class="text-primary text-xl font-bold px-3 py-2 border-b-2 border-primary">اوتام</a>
+                    <a href="#senarai-subjek" class="text-gray-500 text-xl hover:text-gray-900 px-3 py-2 transition-colors">سوبجيك</a>
+                    <a href="#" class="text-gray-500 text-xl hover:text-gray-900 px-3 py-2 transition-colors">تنتڠ كامي</a>
+                    <a href="#" class="text-gray-500 text-xl hover:text-gray-900 px-3 py-2 transition-colors">هوبوڠي</a>
                 </nav>
 
-                <!-- Menu Mudah Alih (Butang Hamburger) -->
+                <!-- Butang Menu Mudah Alih -->
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-gray-500 hover:text-gray-900 focus:outline-none p-2">
                         <i class="fas fa-bars text-2xl"></i>
@@ -104,251 +103,226 @@
             </div>
         </div>
         
-        <!-- Dropdown Menu Mudah Alih (Tersembunyi pada asalnya) -->
+        <!-- Menu Mudah Alih -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 pb-4 px-4 shadow-inner">
-            <a href="#" class="block text-primary font-semibold px-3 py-3 border-b border-gray-100">Utama</a>
-            <a href="#senarai-subjek" class="block text-gray-600 hover:bg-gray-50 px-3 py-3 border-b border-gray-100">Subjek</a>
-            <a href="#" class="block text-gray-600 hover:bg-gray-50 px-3 py-3 border-b border-gray-100">Tentang Kami</a>
-            <a href="#" class="block text-gray-600 hover:bg-gray-50 px-3 py-3">Hubungi</a>
+            <a href="#" class="block text-primary text-xl font-bold px-3 py-3 border-b border-gray-100">اوتام</a>
+            <a href="#senarai-subjek" class="block text-gray-600 text-xl hover:bg-gray-50 px-3 py-3 border-b border-gray-100">سوبجيك</a>
+            <a href="#" class="block text-gray-600 text-xl hover:bg-gray-50 px-3 py-3 border-b border-gray-100">تنتڠ كامي</a>
+            <a href="#" class="block text-gray-600 text-xl hover:bg-gray-50 px-3 py-3">هوبوڠي</a>
         </div>
     </header>
 
-    <!-- Bahagian Hero (Pengenalan) -->
     <main class="flex-grow">
-        <!-- Banner Utama -->
         <div class="relative bg-secondary overflow-hidden">
-            <!-- Corak latar belakang -->
             <div class="absolute inset-0 islamic-pattern"></div>
             
             <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 flex flex-col md:flex-row items-center">
-                <!-- Teks Pengenalan -->
-                <div class="w-full md:w-1/2 pr-0 md:pr-8 text-center md:text-left z-10 fade-in">
-                    <h2 class="text-sm font-semibold text-accent tracking-wider uppercase mb-2">Selamat Datang ke</h2>
-                    <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
-                        Koleksi Latihan Sijil Darjah Enam Agama
+                <!-- Teks Hero -->
+                <div class="w-full md:w-1/2 pe-0 md:pe-8 text-center md:text-start z-10 fade-in">
+                    <h2 class="text-xl font-semibold text-accent tracking-wider mb-2">سلامت داتڠ ك</h2>
+                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+                        كوليكسي لاتيهن سجيل درجه انم اضام
                     </h1>
-                    <p class="text-lg text-emerald-100 mb-8 max-w-2xl mx-auto md:mx-0">
-                        Platform latih tubi komprehensif bagi persediaan peperiksaan SDEA. Pilih mata pelajaran di bawah untuk memulakan latihan anda hari ini.
+                    <p class="text-xl md:text-2xl text-emerald-100 mb-8 max-w-2xl mx-auto md:mx-0">
+                        ڤلتفورم لاتيه توبي كومڤريهينسيف باضي ڤرسديا؞ن ڤڤريقسا؞ن SDEA. ڤيليه مات ڤلاجرن دباوه اونتوق ممولاكن لاتيهن اندا هاري اين.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                        <a href="#senarai-subjek" class="bg-accent hover:bg-yellow-400 text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
-                            Mula Latihan <i class="fas fa-arrow-down"></i>
+                        <a href="#senarai-subjek" class="bg-accent hover:bg-yellow-400 text-gray-900 text-xl font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3">
+                            مولا لاتيهن <i class="fas fa-arrow-down"></i>
                         </a>
                     </div>
                 </div>
                 
-                <!-- Imej/Ilustrasi Hero -->
+                <!-- Ilustrasi Hero -->
                 <div class="w-full md:w-1/2 mt-12 md:mt-0 flex justify-center z-10 fade-in" style="animation-delay: 0.2s;">
-                    <!-- Kotak Ilustrasi Kaligrafi / Buku (Menggunakan CSS untuk rekaan ringkas jika tiada imej) -->
                     <div class="relative w-72 h-72 md:w-80 md:h-80 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 flex flex-col items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                        <div class="text-accent text-6xl mb-4">
+                        <div class="text-accent text-6xl mb-6">
                             <i class="fas fa-quran"></i>
                         </div>
-                        <h3 class="font-arabic text-3xl text-white font-bold mb-2 text-center">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</h3>
-                        <p class="text-white/80 text-center text-sm font-medium">Usaha Tangga Kejayaan</p>
+                        <h3 class="text-4xl text-white font-bold mb-4 text-center">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</h3>
+                        <p class="text-white/90 text-center text-xl font-medium">اوسها تڠضا كجايا؞ن</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Bahagian Senarai Mata Pelajaran -->
-        <div id="senarai-subjek" class="py-16 bg-gray-50">
+        <div id="senarai-subjek" class="py-20 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
-                <!-- Tajuk Bahagian -->
+                <!-- Tajuk Seksyen -->
                 <div class="text-center mb-16 fade-in">
-                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                        Mata Pelajaran SDEA
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900">
+                        مات ڤلاجرن SDEA
                     </h2>
-                    <div class="mt-2 w-24 h-1 bg-primary mx-auto rounded-full"></div>
-                    <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
-                        Pilih subjek di bawah untuk mengakses soalan latihan, nota ringkas, dan ujian kendiri.
+                    <div class="mt-4 w-32 h-1 bg-primary mx-auto rounded-full"></div>
+                    <p class="mt-6 max-w-2xl text-2xl text-gray-600 mx-auto">
+                        ڤيليه سوبجيك دباوه اونتوق مڠاكسيس سوءالن لاتيهن، نوتا ريڠكس، دان اوجين كنديري.
                     </p>
                 </div>
 
-                <!-- Grid Kad Mata Pelajaran -->
+                <!-- Grid Kad Subjek -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     
-                    <!-- Kad 1: Tauhid -->
+                    <!-- 1. Tauhid -->
                     <a href="tauhid.html" class="subject-card group block bg-white rounded-2xl border-2 border-transparent overflow-hidden h-full flex flex-col cursor-pointer">
                         <div class="p-8 flex-grow flex flex-col items-center text-center">
                             <div class="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                                 <i class="fas fa-hand-holding-heart text-3xl text-primary group-hover:text-white"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Tauhid</h3>
-                            <p class="text-gray-500 text-sm">
-                                Latihan asas kepercayaan dan ketuhanan dalam Islam. Memahami sifat-sifat Allah dan Rasul.
+                            <h3 class="text-3xl font-bold text-gray-900 mb-4">توحيد</h3>
+                            <p class="text-gray-600 text-lg">
+                                لاتيهن اساس كڤرچايا؞ن دان كتوهانن دالم إسلام. ممهمي صيفة٢ الله دان رسول.
                             </p>
                         </div>
                         <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center group-hover:bg-emerald-50 transition-colors">
-                            <span class="text-sm font-medium text-primary">Lihat Latihan</span>
-                            <i class="fas fa-arrow-right text-primary"></i>
+                            <span class="text-lg font-bold text-primary">ليهت لاتيهن</span>
+                            <!-- Anak panah ditukar arah ke kiri untuk RTL -->
+                            <i class="fas fa-arrow-left text-primary"></i>
                         </div>
                     </a>
 
-                    <!-- Kad 2: Ibadat -->
+                    <!-- 2. Ibadat -->
                     <a href="ibadat.html" class="subject-card group block bg-white rounded-2xl border-2 border-transparent overflow-hidden h-full flex flex-col cursor-pointer">
                         <div class="p-8 flex-grow flex flex-col items-center text-center">
                             <div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
                                 <i class="fas fa-person-praying text-3xl text-blue-600 group-hover:text-white"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Ibadat</h3>
-                            <p class="text-gray-500 text-sm">
-                                Panduan dan soalan berkaitan solat, puasa, zakat, haji, dan fardu ain yang lain.
+                            <h3 class="text-3xl font-bold text-gray-900 mb-4">عبادة</h3>
+                            <p class="text-gray-600 text-lg">
+                                ڤندوان دان سوءالن بركايتن صلاة، ڤواسا، زكاة، حاجي، دان فرض عين يڠ لاين.
                             </p>
                         </div>
                         <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center group-hover:bg-blue-50 transition-colors">
-                            <span class="text-sm font-medium text-blue-600">Lihat Latihan</span>
-                            <i class="fas fa-arrow-right text-blue-600"></i>
+                            <span class="text-lg font-bold text-blue-600">ليهت لاتيهن</span>
+                            <i class="fas fa-arrow-left text-blue-600"></i>
                         </div>
                     </a>
 
-                    <!-- Kad 3: Akhlak & Tasawuf -->
+                    <!-- 3. Akhlak & Tasawuf -->
                     <a href="akhlaktasawuf.html" class="subject-card group block bg-white rounded-2xl border-2 border-transparent overflow-hidden h-full flex flex-col cursor-pointer">
                         <div class="p-8 flex-grow flex flex-col items-center text-center">
                             <div class="w-20 h-20 rounded-full bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-500 group-hover:text-white transition-colors duration-300">
                                 <i class="fas fa-heart text-3xl text-rose-500 group-hover:text-white"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Akhlak & Tasawuf</h3>
-                            <p class="text-gray-500 text-sm">
-                                Latihan memupuk budi pekerti mulia dan penyucian jiwa berpandukan Al-Quran dan Sunnah.
+                            <h3 class="text-3xl font-bold text-gray-900 mb-4">اخلاق دان تصوف</h3>
+                            <p class="text-gray-600 text-lg">
+                                لاتيهن مموڤوق بودي ڤكرتي موليا دان ڤپوچين جيوا برڤندوكن القرآن دان سنة.
                             </p>
                         </div>
                         <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center group-hover:bg-rose-50 transition-colors">
-                            <span class="text-sm font-medium text-rose-500">Lihat Latihan</span>
-                            <i class="fas fa-arrow-right text-rose-500"></i>
+                            <span class="text-lg font-bold text-rose-500">ليهت لاتيهن</span>
+                            <i class="fas fa-arrow-left text-rose-500"></i>
                         </div>
                     </a>
 
-                    <!-- Kad 4: Faraid -->
+                    <!-- 4. Faraid -->
                     <a href="faraid.html" class="subject-card group block bg-white rounded-2xl border-2 border-transparent overflow-hidden h-full flex flex-col cursor-pointer">
                         <div class="p-8 flex-grow flex flex-col items-center text-center">
                             <div class="w-20 h-20 rounded-full bg-amber-100 flex items-center justify-center mb-6 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
                                 <i class="fas fa-scale-balanced text-3xl text-amber-500 group-hover:text-white"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Faraid</h3>
-                            <p class="text-gray-500 text-sm">
-                                Pengiraan dan pembahagian harta pusaka menurut ketetapan syarak. Latihan penyelesaian masalah.
+                            <h3 class="text-3xl font-bold text-gray-900 mb-4">فرائض</h3>
+                            <p class="text-gray-600 text-lg">
+                                ڤڠيرا؞ن دان ڤمبهاضين هرتا ڤوساك منوروت كتتڤن شرع. لاتيهن ڤپلسياين مسئله.
                             </p>
                         </div>
                         <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center group-hover:bg-amber-50 transition-colors">
-                            <span class="text-sm font-medium text-amber-600">Lihat Latihan</span>
-                            <i class="fas fa-arrow-right text-amber-600"></i>
+                            <span class="text-lg font-bold text-amber-600">ليهت لاتيهن</span>
+                            <i class="fas fa-arrow-left text-amber-600"></i>
                         </div>
                     </a>
 
-                    <!-- Kad 5: Muamalat -->
+                    <!-- 5. Muamalat -->
                     <a href="muamalat.html" class="subject-card group block bg-white rounded-2xl border-2 border-transparent overflow-hidden h-full flex flex-col cursor-pointer">
                         <div class="p-8 flex-grow flex flex-col items-center text-center">
                             <div class="w-20 h-20 rounded-full bg-purple-100 flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300">
                                 <i class="fas fa-handshake text-3xl text-purple-600 group-hover:text-white"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Muamalat</h3>
-                            <p class="text-gray-500 text-sm">
-                                Latihan berkaitan urusan jual beli, pinjaman, sewaan dan hal ehwal ekonomi dalam Islam.
+                            <h3 class="text-3xl font-bold text-gray-900 mb-4">معاملات</h3>
+                            <p class="text-gray-600 text-lg">
+                                لاتيهن بركايتن اوروسن جوال بلي، ڤينجامن، سيوا؞ن دان حال احوال ايكونومي دالم إسلام.
                             </p>
                         </div>
                         <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center group-hover:bg-purple-50 transition-colors">
-                            <span class="text-sm font-medium text-purple-600">Lihat Latihan</span>
-                            <i class="fas fa-arrow-right text-purple-600"></i>
+                            <span class="text-lg font-bold text-purple-600">ليهت لاتيهن</span>
+                            <i class="fas fa-arrow-left text-purple-600"></i>
                         </div>
                     </a>
 
-                    <!-- Kad 6: Bahasa Arab -->
+                    <!-- 6. Bahasa Arab -->
                     <a href="bahasaarab.html" class="subject-card group block bg-white rounded-2xl border-2 border-transparent overflow-hidden h-full flex flex-col cursor-pointer">
                         <div class="p-8 flex-grow flex flex-col items-center text-center">
                             <div class="w-20 h-20 rounded-full bg-cyan-100 flex items-center justify-center mb-6 group-hover:bg-cyan-600 group-hover:text-white transition-colors duration-300">
                                 <i class="fas fa-language text-3xl text-cyan-600 group-hover:text-white"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Bahasa Arab</h3>
-                            <p class="text-gray-500 text-sm">
-                                Latih tubi kosa kata, tatabahasa (Nahu & Saraf), dan pemahaman teks Bahasa Arab asas.
+                            <h3 class="text-3xl font-bold text-gray-900 mb-4">بهاس عرب</h3>
+                            <p class="text-gray-600 text-lg">
+                                لاتيه توبي كوسا كات، تاتابهاس (نحو دان صرف)، دان ڤمهمن تيكس بهاس عرب اساس.
                             </p>
                         </div>
                         <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center group-hover:bg-cyan-50 transition-colors">
-                            <span class="text-sm font-medium text-cyan-600">Lihat Latihan</span>
-                            <i class="fas fa-arrow-right text-cyan-600"></i>
+                            <span class="text-lg font-bold text-cyan-600">ليهت لاتيهن</span>
+                            <i class="fas fa-arrow-left text-cyan-600"></i>
                         </div>
                     </a>
 
                 </div>
             </div>
         </div>
-        
-        <!-- Modal / Popup Mesej (Akan dipaparkan bila subjek diklik) -->
-        <div id="mesej-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-[60] hidden flex items-center justify-center p-4">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 transform scale-95 opacity-0 transition-all duration-300" id="modal-content">
-                <div class="text-center">
-                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 mb-4">
-                        <i class="fas fa-info-circle text-2xl text-primary"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2" id="modal-title">Subjek Dipilih</h3>
-                    <p class="text-sm text-gray-500 mb-6">
-                        Anda telah memilih subjek <strong id="nama-subjek-modal" class="text-gray-800"></strong>. Halaman soalan akan dibangunkan di pautan ini kemudian.
-                    </p>
-                    <button onclick="tutupMesej()" class="w-full bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded-lg transition-colors">
-                        Tutup
-                    </button>
-                </div>
-            </div>
-        </div>
-
     </main>
 
-    <!-- Pengaki (Footer) -->
-    <footer class="bg-gray-900 text-gray-300 py-10 mt-auto">
+    <footer class="bg-gray-900 text-gray-300 py-12 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <!-- Info -->
                 <div>
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="fas fa-book-open text-primary text-xl"></i>
-                        <span class="text-xl font-bold text-white">Latihan SDEA</span>
+                    <div class="flex items-center gap-3 mb-6">
+                        <i class="fas fa-book-open text-primary text-2xl"></i>
+                        <span class="text-3xl font-bold text-white">لاتيهن SDEA</span>
                     </div>
-                    <p class="text-sm text-gray-400">
-                        Platform atas talian untuk membantu pelajar sekolah agama bersedia menghadapi peperiksaan Sijil Darjah Enam Agama (SDEA) dengan lebih berkesan.
+                    <p class="text-lg text-gray-400">
+                        ڤلتفورم اتس تالين اونتوق ممبنتو ڤلاجر سكوله اضام برسديا مڠهادڤي ڤڤريقسا؞ن سجيل درجه انم اضام (SDEA) دڠن لبيه بركسن.
                     </p>
                 </div>
                 
                 <!-- Pautan Pantas -->
                 <div>
-                    <h3 class="text-lg font-semibold text-white mb-4">Pautan Pantas</h3>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-primary transition-colors">Utama</a></li>
-                        <li><a href="#senarai-subjek" class="hover:text-primary transition-colors">Senarai Mata Pelajaran</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors">Panduan Peperiksaan</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors">Soalan Lazim (FAQ)</a></li>
+                    <h3 class="text-2xl font-bold text-white mb-6">ڤاوتن ڤنتس</h3>
+                    <ul class="space-y-3 text-lg">
+                        <li><a href="#" class="hover:text-primary transition-colors">اوتام</a></li>
+                        <li><a href="#senarai-subjek" class="hover:text-primary transition-colors">سناراي مات ڤلاجرن</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">ڤندوان ڤڤريقسا؞ن</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">سوءالن لازيم (FAQ)</a></li>
                     </ul>
                 </div>
                 
                 <!-- Hubungi -->
                 <div>
-                    <h3 class="text-lg font-semibold text-white mb-4">Hubungi Kami</h3>
-                    <ul class="space-y-2 text-sm">
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-envelope mt-1 text-gray-500"></i>
-                            <span>admin@latihansdea.edu.my</span>
+                    <h3 class="text-2xl font-bold text-white mb-6">هوبوڠي كامي</h3>
+                    <ul class="space-y-4 text-lg">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-envelope text-gray-500"></i>
+                            <span dir="ltr" class="text-right w-full font-sans">admin@latihansdea.edu.my</span>
                         </li>
-                        <li class="flex items-start gap-2">
-                            <i class="fas fa-phone mt-1 text-gray-500"></i>
-                            <span>+60 12-345 6789</span>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-phone text-gray-500"></i>
+                            <span dir="ltr" class="text-right w-full font-sans">+60 12-345 6789</span>
                         </li>
                     </ul>
                 </div>
             </div>
             
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center">
-                <p>&copy; 2024 Portal Latihan SDEA. Hak Cipta Terpelihara.</p>
-                <div class="mt-4 md:mt-0 flex gap-4">
-                    <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+            <div class="border-t border-gray-800 mt-10 pt-8 text-center text-lg text-gray-500 flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; 2024 ڤورتل لاتيهن SDEA. حق چيڤتا ترڤليهارا.</p>
+                <div class="mt-4 md:mt-0 flex gap-6">
+                    <a href="#" class="text-gray-500 hover:text-white transition-colors text-xl"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-white transition-colors text-xl"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-white transition-colors text-xl"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Skrip JavaScript -->
     <script>
         // Fungsi untuk Menu Mudah Alih (Mobile Menu)
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -363,41 +337,6 @@
             } else {
                 icon.classList.remove('fa-bars');
                 icon.classList.add('fa-times');
-            }
-        });
-
-        // Fungsi untuk Modal/Popup
-        const modal = document.getElementById('mesej-modal');
-        const modalContent = document.getElementById('modal-content');
-        const namaSubjekSpan = document.getElementById('nama-subjek-modal');
-
-        // Mencegah tindakan 'href' asal dan menunjukkan modal
-        function tunjukMesej(namaSubjek) {
-            event.preventDefault(); // Elak browser lompat ke pautan '#'
-            namaSubjekSpan.textContent = namaSubjek;
-            
-            modal.classList.remove('hidden');
-            // Sedikit delay untuk animasi kemunculan
-            setTimeout(() => {
-                modalContent.classList.remove('scale-95', 'opacity-0');
-                modalContent.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-
-        function tutupMesej() {
-            modalContent.classList.remove('scale-100', 'opacity-100');
-            modalContent.classList.add('scale-95', 'opacity-0');
-            
-            // Tunggu animasi selesai sebelum menyembunyikan modal sepenuhnya
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
-
-        // Tutup modal jika klik di luar kawasan putih
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                tutupMesej();
             }
         });
     </script>
