@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ms" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڤورتل اوتام اخلاق دان تصوف درجه 6 (5 مود)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --obj-primary: #2563eb; --obj-hover: #1d4ed8;
+            --str-primary: #4f46e5; --str-hover: #4338ca;
+            --tf-primary: #db2777; --tf-hover: #be185d;
+            --pm-primary: #059669; --pm-hover: #047857;
+            --match-primary: #d97706; --match-hover: #b45309;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; }
+        .font-jawi { font-family: 'Amiri', serif; line-height: 2.2; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Mod Active States */
+        .obj-nav-active { box-shadow: 0 0 0 4px #bfdbfe; transform: scale(1.05); border-color: var(--obj-primary) !important; }
+        .str-nav-active { background-color: #eef2ff !important; border-right: 4px solid var(--str-primary) !important; color: var(--str-primary) !important; font-weight: bold; }
+        .tf-nav-active { box-shadow: 0 0 0 4px #fce7f3; transform: scale(1.05); border-color: var(--tf-primary) !important; }
+        .match-nav-active { box-shadow: 0 0 0 4px #fef3c7; transform: scale(1.05); border-color: var(--match-primary) !important; }
+        
+        /* Interactive Elements */
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover:not(:disabled) { transform: translateX(-5px); } 
+        .correct-ans { background-color: #22c55e !important; color: white !important; border-color: #16a34a !important; }
+        .wrong-ans { background-color: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+        .disabled-option { opacity: 0.6; cursor: not-allowed; }
+        .textarea-jawi { resize: none; line-height: 2; }
+        
+        /* Mind Map Styles */
+        .node-level-1 { background-color: #059669; color: white; border-radius: 16px; padding: 15px 30px; font-weight: bold; font-size: 2rem; text-align: center; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 4px solid #34d399; z-index: 10; max-width: 350px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+        .node-level-2 { background-color: #0f766e; color: white; border-radius: 12px; padding: 12px 25px; font-size: 1.6rem; font-weight: bold; text-align: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 2px solid #5eead4; z-index: 10; max-width: 300px; }
+        .node-level-3 { background-color: #f0fdf4; color: #065f46; border-radius: 10px; padding: 10px 20px; font-size: 1.4rem; font-weight: bold; text-align: center; border: 2px solid #6ee7b7; box-shadow: 0 2px 4px rgba(0,0,0,0.05); z-index: 10; max-width: 250px; }
+        .node-level-4 { background-color: #ffffff; color: #0f766e; border-radius: 8px; padding: 8px 15px; font-size: 1.2rem; text-align: center; border: 1px solid #99f6e4; z-index: 10; max-width: 200px; }
+        
+        .mm-bg { background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 30px 30px; }
+        .mm-control-btn { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: #059669; font-size: 1.4rem; transition: all 0.2s; border: 2px solid #d1fae5; }
+        .mm-control-btn:hover { background: #ecfdf5; transform: scale(1.05); }
+        
+        /* Matching Game Styles */
+        .match-card { transition: all 0.2s; cursor: pointer; user-select: none; }
+        .match-card:hover { transform: scale(1.02); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .match-card.selected { border-color: var(--match-primary); background-color: #fef3c7; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.3); }
+        .match-card.matched { border-color: #10b981; background-color: #ecfdf5; color: #065f46; cursor: default; opacity: 0.8; }
+        .match-card.error { border-color: #ef4444; background-color: #fef2f2; animation: shake 0.4s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    </style>
+</head>
+<body class="w-full h-screen text-slate-800 flex flex-col relative">
+
+    <!-- Global Modal -->
+    <div id="customModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 z-[100] hidden flex items-center justify-center fade-in">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl text-center">
+            <div class="text-blue-500 text-5xl mb-4" id="modalIcon"><i class="fas fa-info-circle"></i></div>
+            <h3 class="font-jawi text-3xl font-bold text-slate-800 mb-4" id="modalTitle">معلومن</h3>
+            <p class="font-jawi text-xl text-slate-600 mb-8 leading-loose" id="modalMessage">ميسيج</p>
+            <button onclick="closeModal()" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold font-jawi text-xl transition-all">توتوڤ <i class="fas fa-times ml-2"></i></button>
+        </div>
+    </div>
+
+    <!-- Home Screen -->
+    <div id="home-screen" class="flex-1 flex flex-col h-full overflow-y-auto bg-slate-50">
+        <div class="max-w-6xl mx-auto w-full px-6 py-12 md:py-20 flex-1 flex flex-col justify-center">
+            <div class="text-center mb-12 fade-in">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-blue-100 text-blue-600 rounded-full text-5xl mb-6 shadow-inner"><i class="fas fa-heart"></i></div>
+                <h1 class="font-jawi text-5xl md:text-6xl font-bold text-slate-800 mb-6 leading-loose">ڤورتل اوتام اخلاق دان تصوف درجه 6</h1>
+                <p class="font-jawi text-2xl md:text-3xl text-slate-500 max-w-3xl mx-auto leading-loose">مرڠکومي ڤلاجرن 1 هيڠݢ 10. 5 مود ڤمبلاجرن دڠن سوءالن ڤنوه تنڤا اولڠن.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto w-full fade-in" style="animation-delay: 0.1s;">
+                <!-- Mod 1: Objektif -->
+                <button onclick="switchView('objective')" class="group text-right bg-white rounded-3xl p-8 border-2 border-transparent hover:border-blue-400 hover:shadow-2xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[280px]">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-blue-500"></div>
+                    <div>
+                        <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-tasks"></i></div>
+                        <h2 class="font-jawi text-3xl font-bold mb-3 text-slate-800">اوجين اوبجيکتيف</h2>
+                        <p class="font-jawi text-lg text-slate-500 leading-loose">سوءالن اوبجيکتيف بربنتوق ڤيليهن ݢندا (A, B, C, D).</p>
+                    </div>
+                    <div class="mt-6 flex items-center text-blue-600 font-bold font-jawi text-xl group-hover:translate-x-[-10px] transition-transform">مولا اوجين <i class="fas fa-arrow-left mr-2"></i></div>
+                </button>
+                <!-- Mod 2: Struktur -->
+                <button onclick="switchView('structured')" class="group text-right bg-white rounded-3xl p-8 border-2 border-transparent hover:border-indigo-400 hover:shadow-2xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[280px]">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-indigo-500"></div>
+                    <div>
+                        <div class="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-book-open"></i></div>
+                        <h2 class="font-jawi text-3xl font-bold mb-3 text-slate-800">لاتيهن ستروکتور</h2>
+                        <p class="font-jawi text-lg text-slate-500 leading-loose">سوءالن ايسي تمڤت کوسوڠ/جواڤن ڤينديق.</p>
+                    </div>
+                    <div class="mt-6 flex items-center text-indigo-600 font-bold font-jawi text-xl group-hover:translate-x-[-10px] transition-transform">مولا لاتيهن <i class="fas fa-arrow-left mr-2"></i></div>
+                </button>
+                <!-- Mod 3: Betul/Salah -->
+                <button onclick="switchView('truefalse')" class="group text-right bg-white rounded-3xl p-8 border-2 border-transparent hover:border-pink-400 hover:shadow-2xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[280px]">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-pink-500"></div>
+                    <div>
+                        <div class="w-14 h-14 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-check-double"></i></div>
+                        <h2 class="font-jawi text-3xl font-bold mb-3 text-slate-800">اوجين بتول/ساله</h2>
+                        <p class="font-jawi text-lg text-slate-500 leading-loose">ڤپاتاءن اخلاق. تنتوکن 'بتول' اتاو 'ساله'.</p>
+                    </div>
+                    <div class="mt-6 flex items-center text-pink-600 font-bold font-jawi text-xl group-hover:translate-x-[-10px] transition-transform">مولا اوجين <i class="fas fa-arrow-left mr-2"></i></div>
+                </button>
+                <!-- Mod 4: Peta Minda -->
+                <button onclick="switchView('mindmap')" class="group text-right bg-white rounded-3xl p-8 border-2 border-transparent hover:border-emerald-400 hover:shadow-2xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[280px] md:col-span-2 lg:col-span-1">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-emerald-500"></div>
+                    <div>
+                        <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-project-diagram"></i></div>
+                        <h2 class="font-jawi text-3xl font-bold mb-3 text-slate-800">ڤتا ميندا (نوتا)</h2>
+                        <p class="font-jawi text-lg text-slate-500 leading-loose">نوتا ريڠکس بربنتوق ڤتا ميندا اينترکتيف.</p>
+                    </div>
+                    <div class="mt-6 flex items-center text-emerald-600 font-bold font-jawi text-xl group-hover:translate-x-[-10px] transition-transform">ليهت نوتا <i class="fas fa-arrow-left mr-2"></i></div>
+                </button>
+                <!-- Mod 5: Padanan -->
+                <button onclick="switchView('match')" class="group text-right bg-white rounded-3xl p-8 border-2 border-transparent hover:border-amber-500 hover:shadow-2xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[280px] md:col-span-2 lg:col-span-2">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-amber-500"></div>
+                    <div>
+                        <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-puzzle-piece"></i></div>
+                        <h2 class="font-jawi text-3xl font-bold mb-3 text-slate-800">ڤادنن (سوءالن)</h2>
+                        <p class="font-jawi text-lg text-slate-500 leading-loose">سيشن ڤادنکن کونسيف اتاو ڤپاتاءن دڠن جواڤن يڠ بتول.</p>
+                    </div>
+                    <div class="mt-6 flex items-center text-amber-600 font-bold font-jawi text-xl group-hover:translate-x-[-10px] transition-transform">مولا ڤرماءينن <i class="fas fa-arrow-left mr-2"></i></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mod 1: Ujian Objektif App -->
+    <div id="objective-app" class="hidden flex-1 flex h-full overflow-hidden w-full relative">
+        <div id="objMobileOverlay" class="fixed inset-0 bg-slate-900 bg-opacity-50 z-40 hidden md:hidden transition-opacity" onclick="toggleSidebar('obj')"></div>
+        <aside id="obj-sidebar" class="bg-white w-80 flex-shrink-0 border-l border-slate-200 flex flex-col h-full absolute md:relative z-50 transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shadow-xl md:shadow-none right-0 top-0">
+            <div class="h-24 flex flex-col justify-center px-6 border-b border-slate-200 bg-blue-50">
+                <div class="flex items-center justify-between"><h2 class="font-jawi text-3xl font-bold text-blue-900">مينو سوءالن</h2><button onclick="toggleSidebar('obj')" class="md:hidden text-slate-500 hover:text-blue-600 text-2xl"><i class="fas fa-times"></i></button></div>
+                <div class="mt-2 text-sm font-bold text-blue-600 flex justify-between font-sans"><span id="obj-scoreTracker">مرکه: 0</span><span id="obj-progressTracker">دجواب: 0</span></div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-6" id="obj-sidebarMenu"></div>
+        </aside>
+        <main class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50 relative">
+            <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-6 md:px-10 shadow-sm flex-shrink-0 z-10">
+                <div class="flex items-center gap-4"><button onclick="toggleSidebar('obj')" class="md:hidden text-slate-600 hover:text-blue-600 text-2xl"><i class="fas fa-bars"></i></button><div class="flex items-center gap-3 text-blue-600 bg-blue-50 px-4 py-2 rounded-full font-bold"><i class="fas fa-tasks"></i><span class="font-jawi text-xl md:text-2xl pt-1 hidden sm:block">اوجين اوبجيکتيف</span></div></div>
+                <div class="flex items-center gap-4"><div class="font-jawi text-lg md:text-xl text-slate-500 font-bold hidden md:block" id="obj-headerTopicIndicator">ڤلاجرن 1</div><div class="w-px h-8 bg-slate-200 hidden md:block"></div><button onclick="switchView('home')" class="font-jawi text-xl bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl transition-colors font-bold flex items-center gap-2"><i class="fas fa-home"></i> <span class="hidden sm:inline">لامن اوتام</span></button></div>
+            </header>
+            <div class="flex-1 overflow-y-auto p-6 md:p-12 scroll-smooth" id="obj-scrollArea">
+                <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden fade-in relative" id="obj-questionCard">
+                    <div class="bg-blue-600 px-8 py-6 flex justify-between items-center text-white"><h3 class="font-sans text-xl md:text-2xl font-bold tracking-wide" id="obj-qNumberBadge">سوءالن 1</h3><span class="bg-white/20 px-4 py-1 rounded-full text-sm font-semibold tracking-wider font-sans" id="obj-qCategoryBadge">TOPIK</span></div>
+                    <div class="p-8 md:p-12 min-h-[400px]">
+                        <p class="font-jawi text-3xl md:text-4xl text-slate-800 font-bold mb-10 leading-loose" id="obj-questionText">مموءات سوءالن...</p>
+                        <div id="obj-optionsContainer" class="space-y-5"></div>
+                        <div id="obj-feedbackBox" class="hidden mt-8 p-6 rounded-2xl border-2 font-jawi text-2xl md:text-3xl font-bold flex items-center gap-4 fade-in"></div>
+                    </div>
+                </div>
+                <div class="max-w-4xl mx-auto mt-8 flex justify-between items-center pb-12">
+                    <button onclick="prevQuestion('obj')" id="obj-prevBtn" class="px-6 py-4 bg-white border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-300 rounded-2xl font-bold font-jawi text-2xl transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"><i class="fas fa-arrow-right"></i> سبلومڽ</button>
+                    <button onclick="nextQuestion('obj')" id="obj-nextBtn" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold font-jawi text-2xl transition-all shadow-md shadow-blue-200 flex items-center gap-2">ستروسڽ <i class="fas fa-arrow-left"></i></button>
+                </div>
+                <div class="max-w-4xl mx-auto text-center hidden pb-12" id="obj-finishContainer">
+                    <button onclick="showFinalResult('obj')" class="px-10 py-5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl shadow-lg transition-transform hover:scale-105 font-jawi text-3xl">ليهت کڤوتوسن ڤنوه <i class="fas fa-flag-checkered mr-3"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mod 2: Latihan Struktur App -->
+    <div id="structured-app" class="hidden flex-1 flex h-full overflow-hidden w-full relative">
+        <div id="strMobileOverlay" class="fixed inset-0 bg-slate-900 bg-opacity-50 z-40 hidden md:hidden transition-opacity" onclick="toggleSidebar('str')"></div>
+        <aside id="str-sidebar" class="bg-white w-80 flex-shrink-0 border-l border-slate-200 flex flex-col h-full absolute md:relative z-50 transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shadow-xl md:shadow-none right-0 top-0">
+            <div class="h-20 flex items-center justify-between px-6 border-b border-slate-200 bg-indigo-50"><h2 class="font-jawi text-3xl font-bold text-indigo-900">مينو نافيݢاسي</h2><button onclick="toggleSidebar('str')" class="md:hidden text-slate-500 hover:text-indigo-600 text-2xl"><i class="fas fa-times"></i></button></div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-6" id="str-sidebarMenu"></div>
+        </aside>
+        <main class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50 relative">
+            <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-6 md:px-10 shadow-sm flex-shrink-0 z-10">
+                <div class="flex items-center gap-4"><button onclick="toggleSidebar('str')" class="md:hidden text-slate-600 hover:text-indigo-600 text-2xl"><i class="fas fa-bars"></i></button><div class="flex items-center gap-3 text-indigo-600 bg-indigo-50 px-4 py-2 rounded-full font-bold"><i class="fas fa-book-open"></i><span class="font-jawi text-xl md:text-2xl pt-1 hidden sm:block">لاتيهن ستروکتور</span></div></div>
+                <div class="flex items-center gap-4"><div class="font-jawi text-lg md:text-xl text-slate-500 font-bold hidden md:block" id="str-headerTopicIndicator">ڤلاجرن 1</div><div class="w-px h-8 bg-slate-200 hidden md:block"></div><button onclick="switchView('home')" class="font-jawi text-xl bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl transition-colors font-bold flex items-center gap-2"><i class="fas fa-home"></i> <span class="hidden sm:inline">لامن اوتام</span></button></div>
+            </header>
+            <div class="flex-1 overflow-y-auto p-6 md:p-12 scroll-smooth" id="str-scrollArea">
+                <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden fade-in" id="str-questionCard">
+                    <div class="bg-indigo-600 px-8 py-6 flex justify-between items-center text-white"><h3 class="font-sans text-xl md:text-2xl font-bold tracking-wide" id="str-qNumberBadge">سوءالن 1</h3><span class="bg-white/20 px-4 py-1 rounded-full text-sm font-semibold tracking-wider font-sans" id="str-qCategoryBadge">TOPIK</span></div>
+                    <div class="p-8 md:p-12">
+                        <p class="font-jawi text-3xl md:text-4xl text-slate-800 font-bold mb-10 leading-loose" id="str-questionText">مموءات سوءالن...</p>
+                        <div class="mb-8"><label class="block font-jawi text-2xl text-slate-500 mb-3 font-semibold"><i class="fas fa-pen-nib ml-2"></i>روأڠن منجواب (اوڤشينل)</label><textarea id="str-userAnswer" rows="3" class="font-jawi w-full bg-slate-50 border border-slate-200 rounded-2xl p-5 text-2xl md:text-3xl text-indigo-900 focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 transition-all textarea-jawi placeholder-slate-300" placeholder="تاءيڤ جواڤن اندا د سيني..."></textarea></div>
+                        <div class="space-y-6">
+                            <button onclick="revealStrAnswer()" id="str-revealBtn" class="w-full md:w-auto px-8 py-4 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold rounded-xl transition-colors font-jawi text-2xl md:text-3xl flex items-center justify-center gap-3"><i class="fas fa-eye"></i> ڤاڤر سکيما جواڤن</button>
+                            <div id="str-answerBox" class="hidden bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-8 fade-in"><p class="font-jawi text-2xl text-emerald-800 font-bold mb-2"><i class="fas fa-check-circle ml-2"></i>جواڤن سبنر:</p><p class="font-jawi text-3xl md:text-4xl text-emerald-700 font-bold leading-loose" id="str-answerText"></p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="max-w-4xl mx-auto mt-8 flex justify-between items-center pb-12">
+                    <button onclick="prevQuestion('str')" id="str-prevBtn" class="px-6 py-4 bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-300 rounded-2xl font-bold font-jawi text-2xl transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"><i class="fas fa-arrow-right"></i> سبلومڽ</button>
+                    <button onclick="nextQuestion('str')" id="str-nextBtn" class="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold font-jawi text-2xl transition-all shadow-md shadow-indigo-200 flex items-center gap-2">ستروسڽ <i class="fas fa-arrow-left"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mod 3: Ujian Betul/Salah App -->
+    <div id="truefalse-app" class="hidden flex-1 flex h-full overflow-hidden w-full relative">
+        <div id="tfMobileOverlay" class="fixed inset-0 bg-slate-900 bg-opacity-50 z-40 hidden md:hidden transition-opacity" onclick="toggleSidebar('tf')"></div>
+        <aside id="tf-sidebar" class="bg-white w-80 flex-shrink-0 border-l border-slate-200 flex flex-col h-full absolute md:relative z-50 transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shadow-xl md:shadow-none right-0 top-0">
+            <div class="h-24 flex flex-col justify-center px-6 border-b border-slate-200 bg-pink-50">
+                <div class="flex items-center justify-between"><h2 class="font-jawi text-3xl font-bold text-pink-900">مينو سوءالن</h2><button onclick="toggleSidebar('tf')" class="md:hidden text-slate-500 hover:text-pink-600 text-2xl"><i class="fas fa-times"></i></button></div>
+                <div class="mt-2 text-sm font-bold text-pink-600 flex justify-between font-sans"><span id="tf-scoreTracker">مرکه: 0</span><span id="tf-progressTracker">دجواب: 0</span></div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-6" id="tf-sidebarMenu"></div>
+        </aside>
+        <main class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50 relative">
+            <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-6 md:px-10 shadow-sm flex-shrink-0 z-10">
+                <div class="flex items-center gap-4"><button onclick="toggleSidebar('tf')" class="md:hidden text-slate-600 hover:text-pink-600 text-2xl"><i class="fas fa-bars"></i></button><div class="flex items-center gap-3 text-pink-600 bg-pink-50 px-4 py-2 rounded-full font-bold"><i class="fas fa-check-double"></i><span class="font-jawi text-xl md:text-2xl pt-1 hidden sm:block">اوجين بتول/ساله</span></div></div>
+                <div class="flex items-center gap-4"><div class="font-jawi text-lg md:text-xl text-slate-500 font-bold hidden md:block" id="tf-headerTopicIndicator">ڤلاجرن 1</div><div class="w-px h-8 bg-slate-200 hidden md:block"></div><button onclick="switchView('home')" class="font-jawi text-xl bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl transition-colors font-bold flex items-center gap-2"><i class="fas fa-home"></i> <span class="hidden sm:inline">لامن اوتام</span></button></div>
+            </header>
+            <div class="flex-1 overflow-y-auto p-6 md:p-12 scroll-smooth" id="tf-scrollArea">
+                <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden fade-in relative" id="tf-questionCard">
+                    <div class="bg-pink-600 px-8 py-6 flex justify-between items-center text-white"><h3 class="font-sans text-xl md:text-2xl font-bold tracking-wide" id="tf-qNumberBadge">سوءالن 1</h3><span class="bg-white/20 px-4 py-1 rounded-full text-sm font-semibold tracking-wider font-sans" id="tf-qCategoryBadge">TOPIK</span></div>
+                    <div class="p-8 md:p-12 min-h-[400px] flex flex-col justify-center text-center">
+                        <p class="font-jawi text-3xl md:text-5xl text-slate-800 font-bold mb-16 leading-loose" id="tf-questionText">مموءات سوءالن...</p>
+                        <div class="grid grid-cols-2 gap-6 max-w-2xl mx-auto w-full">
+                            <button onclick="selectTfAnswer(true)" id="tf-btn-true" class="tf-option-btn w-full py-8 px-6 bg-white border-4 border-emerald-100 text-emerald-600 hover:border-emerald-500 hover:bg-emerald-50 rounded-3xl font-bold flex flex-col items-center gap-4 transition-all"><i class="fas fa-check-circle text-6xl"></i><span class="font-jawi text-4xl">بتول</span></button>
+                            <button onclick="selectTfAnswer(false)" id="tf-btn-false" class="tf-option-btn w-full py-8 px-6 bg-white border-4 border-rose-100 text-rose-600 hover:border-rose-500 hover:bg-rose-50 rounded-3xl font-bold flex flex-col items-center gap-4 transition-all"><i class="fas fa-times-circle text-6xl"></i><span class="font-jawi text-4xl">ساله</span></button>
+                        </div>
+                        <div id="tf-feedbackBox" class="hidden mt-12 p-6 rounded-2xl border-2 font-jawi text-2xl md:text-3xl font-bold flex items-center justify-center gap-4 fade-in"></div>
+                    </div>
+                </div>
+                <div class="max-w-4xl mx-auto mt-8 flex justify-between items-center pb-12">
+                    <button onclick="prevQuestion('tf')" id="tf-prevBtn" class="px-6 py-4 bg-white border border-slate-200 text-slate-600 hover:text-pink-600 hover:border-pink-300 rounded-2xl font-bold font-jawi text-2xl transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"><i class="fas fa-arrow-right"></i> سبلومڽ</button>
+                    <button onclick="nextQuestion('tf')" id="tf-nextBtn" class="px-8 py-4 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-bold font-jawi text-2xl transition-all shadow-md shadow-pink-200 flex items-center gap-2">ستروسڽ <i class="fas fa-arrow-left"></i></button>
+                </div>
+                <div class="max-w-4xl mx-auto text-center hidden pb-12" id="tf-finishContainer">
+                    <button onclick="showFinalResult('tf')" class="px-10 py-5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl shadow-lg transition-transform hover:scale-105 font-jawi text-3xl">ليهت کڤوتوسن ڤنوه <i class="fas fa-flag-checkered mr-3"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mod 4: Peta Minda App -->
+    <div id="mindmap-app" class="hidden flex-1 flex flex-col h-full overflow-hidden w-full relative bg-slate-50">
+        <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-6 md:px-10 shadow-sm flex-shrink-0 z-20 relative">
+            <div class="flex items-center gap-3 text-emerald-600 bg-emerald-50 px-4 py-2 rounded-full font-bold"><i class="fas fa-project-diagram"></i><span class="font-jawi text-xl md:text-2xl pt-1">ڤتا ميندا اخلاق</span></div>
+            <div class="flex items-center gap-4">
+                <select id="mm-topic-select" onchange="renderMindMap(this.value)" class="font-jawi text-xl bg-white border-2 border-emerald-200 text-emerald-800 rounded-xl px-4 py-2 focus:outline-none focus:border-emerald-500 cursor-pointer shadow-sm">
+                    <option value="0">ڤلاجرن 1: علمو اخلاق</option>
+                    <option value="1">ڤلاجرن 2: ادب ترهادڤ عالم سکيتر</option>
+                    <option value="2">ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا</option>
+                    <option value="3">ڤلاجرن 4: احسان</option>
+                    <option value="4">ڤلاجرن 5: رضا</option>
+                    <option value="5">ڤلاجرن 6: تواضع</option>
+                    <option value="6">ڤلاجرن 7: تفکر</option>
+                    <option value="7">ڤلاجرن 8: عجب</option>
+                    <option value="8">ڤلاجرن 9: سڠک بوروق</option>
+                    <option value="9">ڤلاجرن 10: بخيل</option>
+                </select>
+                <button onclick="switchView('home')" class="font-jawi text-xl bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl transition-colors font-bold flex items-center gap-2"><i class="fas fa-home"></i> <span class="hidden sm:inline">لامن اوتام</span></button>
+            </div>
+        </header>
+
+        <!-- Controls -->
+        <div class="absolute bottom-8 right-8 z-30 flex flex-col gap-3">
+            <button onclick="zoomMindMap(0.1)" class="mm-control-btn" title="Zum Masuk"><i class="fas fa-search-plus"></i></button>
+            <button onclick="zoomMindMap(-0.1)" class="mm-control-btn" title="Zum Keluar"><i class="fas fa-search-minus"></i></button>
+            <button onclick="resetMindMap()" class="mm-control-btn" title="Asal"><i class="fas fa-compress-arrows-alt"></i></button>
+        </div>
+
+        <div class="flex-1 overflow-hidden relative bg-emerald-50/20 mm-bg cursor-grab active:cursor-grabbing" id="mm-viewport">
+            <div id="mm-transform-layer" class="w-full h-full relative origin-top transition-transform duration-200 ease-out flex justify-center pt-16 pb-32">
+                <!-- SVG layer for connecting lines -->
+                <svg id="mm-svg" class="absolute top-0 left-0 w-full h-full pointer-events-none z-0"></svg>
+                <!-- Nodes injected here via recursive function -->
+                <div id="mm-nodes-wrapper" class="relative z-10 font-jawi w-max h-max"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mod 5: Padanan (Match) App -->
+    <div id="match-app" class="hidden flex-1 flex flex-col h-full overflow-hidden w-full relative bg-amber-50">
+        <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-6 md:px-10 shadow-sm flex-shrink-0 z-10">
+            <div class="flex items-center gap-3 text-amber-600 bg-amber-50 px-4 py-2 rounded-full font-bold"><i class="fas fa-puzzle-piece"></i><span class="font-jawi text-xl md:text-2xl pt-1">ڤادنن</span></div>
+            <div class="flex items-center gap-4">
+                <span id="match-progress" class="font-sans font-bold text-amber-700 bg-amber-100 px-4 py-1 rounded-full">Level 1/10</span>
+                <button onclick="switchView('home')" class="font-jawi text-xl bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl transition-colors font-bold flex items-center gap-2"><i class="fas fa-home"></i> <span class="hidden sm:inline">لامن اوتام</span></button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-6 md:p-10 flex flex-col items-center">
+            <div class="text-center mb-8 max-w-2xl fade-in">
+                <h2 class="font-jawi text-4xl text-amber-900 font-bold mb-2" id="match-title">سيشن 1</h2>
+                <p class="font-jawi text-xl text-amber-700">ڤادنکن کونسيف د سبله کانن دڠن کترڠن يڠ بتول د سبله کيري.</p>
+            </div>
+            
+            <!-- Game Board -->
+            <div class="w-full max-w-5xl flex gap-6 md:gap-12 relative fade-in" id="match-board">
+                <!-- Left Column (Descriptions) -->
+                <div class="flex-1 flex flex-col gap-4" id="match-left-col"></div>
+                <!-- Right Column (Terms) -->
+                <div class="flex-1 flex flex-col gap-4" id="match-right-col"></div>
+                <!-- SVG lines for matched pairs -->
+                <svg id="match-lines" class="absolute inset-0 w-full h-full pointer-events-none z-0"></svg>
+            </div>
+            
+            <!-- Success Overlay for Level -->
+            <div id="match-level-complete" class="hidden mt-10 text-center fade-in">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 text-green-600 rounded-full text-4xl mb-4"><i class="fas fa-check"></i></div>
+                <h3 class="font-jawi text-4xl text-green-700 font-bold mb-6">سيشن سلساي!</h3>
+                <button onclick="nextMatchLevel()" id="match-next-btn" class="px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold font-jawi text-2xl transition-all shadow-lg">سيشن ستروسڽ <i class="fas fa-arrow-left mr-2"></i></button>
+            </div>
+        </div>
+    </div>
+
+<script>
+const objectiveData = [
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "اڤاکه مقصود اخلاق منوروت ايستيله شرع؟", options: ["تيڠکه لاکو يڠ دحاصيلکن دڠن موده تنڤا ممرلوکن ڤميکيرن", "حکوم يڠ دتتڤکن اوليه اݢام", "ڤربواتن يڠ ممڤوڽاءي توجوان ترتنتو", "صيفت سمولا جادي ماءنسي"], ans: 0 },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "اڤاکه سومبر يڠ تيدق ترماسوق دالم امڤت سومبر اوتام علمو اخلاق إسلامية؟", options: ["نفسو (هاوا نفسو)", "القرءان", "السنة", "قياس"], ans: 0 },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "اخلاق يڠ بايق دان ترفوجي منوروت شرع دان عقل دناماکن سباݢاي اخلاق...", options: ["محمودة", "مذمومة", "سيئة", "کبيرة"], ans: 0 },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "اخلاق يڠ بوروق دان ترچلا منوروت شرع دان عقل دناماکن سباݢاي اخلاق...", options: ["مذمومة", "محمودة", "حسنة", "کباجيقن"], ans: 0 },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "انتارا بريکوت، يڠ ماناکه بوکن کڤنتيڠن ممڤلاجري علمو اخلاق؟", options: ["منجاديکن ماءنسي ساومبوڠ", "ڤندوان اونتوق منيلاي تيندقن سام اد بايق اتاو بوروق", "ممبنتوق کمورنين جيوا", "ممبينا مشارکت يڠ هرموني"], ans: 0 },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "انتارا کلبيهن ممڤلاجري علمو اخلاق اياله ممبينا...", options: ["کلوارݢ سکينة", "ککاياءن دنيا", "رومه يڠ بسر", "ڤنيڤوان دالم مشارکت"], ans: 0 },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "اڤاکه مقصود عالم؟", options: ["اڤ يڠ اد د لاڠيت دان د بومي سلاين دري الله", "بيناتڠ سهاج", "تمبوه-تومبوهن سهاج", "ماءنسي سهاج"], ans: 0 },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "اڤاکه کڤنتيڠن منجاݢ عالم سکيتر؟", options: ["سباݢاي تندا کوجودن دان ککواساءن الله", "او نتوق مروڠسقکن اودارا", "اونتوق منمبهکن ڤپاکيت", "او نتوق مموسنهکن بيناتڠ"], ans: 0 },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "انتارا ڤونچا برلاکو کروسقن عالم سکيتر اياله...", options: ["سيکڤ طمع دان راکوس ترهادڤ سومبر عالم", "منانم سمولا ڤوکوق", "مماتوهي ڤراتورن عالم سکيتر", "ممبوڠ سمڤه د تمڤت يڠ بتول"], ans: 0 },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "ڤنچمرن اودارا بوليه مپببکن...", options: ["کڤانسن ݢلوبل دان هودن اسيد", "أير منجادي جره", "تانه منجادي سوبور", "بيناتڠ سيهت"], ans: 0 },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "چارا مليندوڠي عالم سکيتر ترماسوقله ممکسيماکن ڤڠݢوناءن باهن...", options: ["کيتار سمولا", "براقون", "کيميا", "ڤلاستيق"], ans: 0 },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "کچينتاءن کڤد نݢارا برمقصود راس کاسيه سأورڠ ورݢانݢارا ترهادڤ نݢاراڽ سرتا بريکرار او نتوق...", options: ["ممڤرتاهنکنڽ", "مروڠسقکنڽ", "ممبينچينيا", "منيڠݢلکنڽ"], ans: 0 },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "نبي محمد صلى الله عليه وسلم ساڠت مپايڠي تمڤت کلاهيرن بݢيندا يايت...", options: ["مكة", "مدينة", "طائف", "خيبر"], ans: 0 },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "انتارا ادب کچينتاءن کڤد نݢارا اياله سنتياس برشکور منجادي...", options: ["ورݢانݢارا", "ڤلاچونڠ", "ڤمبرونتق", "ڤنداتڠ اسيڠ"], ans: 0 },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "چارا منيڠکتکن راس چينتا ڤد نݢارا اياله دڠن...", options: ["مڠحياتي سيجاره نݢارا", "ممبوروکن نام نݢارا", "ملڠݢر اوندڠ-اوندڠ", "تيدق مڠحرمتي جلالور ݢميلڠ"], ans: 0 },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "چيري اورڠ يڠ منچينتاي نݢارا اياله بڠݢ منجادي رعية دان...", options: ["براس چينتا اکن نݢارا", "ممبوڠ سمڤه مراتا-رات", "تيدق ممباير چوکاي", "منچتوسکن هورو-هارا"], ans: 0 },
+    { topic: "ڤلاجرن 4: احسان", q: "اڤاکه مقصود احسان ڤد بهاس؟", options: ["بربوات کباجيقن (بوات بايق)", "بربوات کجاهتن", "برسام-سام", "برکاوک"], ans: 0 },
+    { topic: "ڤلاجرن 4: احسان", q: "دالم حديث جبريل، احسان دتکريڤکن سباݢاي مپمبه الله سأوله-اوله کامو...", options: ["مليهت-ڽ", "مليهت ملائکة", "مليهت شرݢ", "مليهت نراک"], ans: 0 },
+    { topic: "ڤلاجرن 4: احسان", q: "احسان دالم عبادة برمقصود...", options: ["منونايكن عبادة دڠن خشوع دان اخلاص", "ملاکوکن عبادة او نتوق دڤوجي", "منونايكن عبادة دڠن چڤت", "ملاکوکن عبادة سماس راس راجين سهاج"], ans: 0 },
+    { topic: "ڤلاجرن 4: احسان", q: "احسان دالم معملة ترماسوقله...", options: ["جوجور دان امانه دالم اوروسن", "منيڤو دالم تيمبڠن", "ممقسا اورڠ ممبلي", "معمبيل راسواه"], ans: 0 },
+    { topic: "ڤلاجرن 4: احسان", q: "انتارا کلبيهن برصيفت احسان اياله منداڤت...", options: ["رحمة دان کاسيه سايڠ الله", "کماراهن الله", "کبنچين مشارکة", "کساكيتن"], ans: 0 },
+    { topic: "ڤلاجرن 5: رضا", q: "رضا ڤد بهاس برمقصود...", options: ["سوک دان کلاڤڠن هاتي", "سديه", "ماره", "کچيوا"], ans: 0 },
+    { topic: "ڤلاجرن 5: رضا", q: "رضا دالم اصطيلة تصوف برمقصود...", options: ["منريما دڠن تنڠ سݢالا کجادين يڠ دتتڤکن اوليه الله", "منولق قدر الله", "برسديه دڠن مصيبة", "ماره دڠن اوجين"], ans: 0 },
+    { topic: "ڤلاجرن 5: رضا", q: "اڤاکه حکوم منچاري رضا ماءنسي دريڤد رضا الله (ترݢولوڠ دالم رياء)؟", options: ["حرام", "واجب", "سنة", "مکروه"], ans: 0 },
+    { topic: "ڤلاجرن 5: رضا", q: "رضا منريما تکليف (ڤرينته) شرع برمعنا...", options: ["ملاکوکن سݢالا سوروهن دان منيڠݢلکن لارڠن الله دڠن هاتي يڠ لاڤڠ", "ملاکوکن ڤرينته الله دڠن برات هاتي", "تيدق ملاکوکن ڤرينته الله", "ملاکوکن معصية دڠن سوک هاتي"], ans: 0 },
+    { topic: "ڤلاجرن 5: رضا", q: "چارا منچاڤاي کمانيسن رضا اياله دڠن مپدراي بهاوا...", options: ["سموا کجادين اداله درڤد الله يڠ مها بيجقسان", "دنيا اين ککل", "ماءنسي يڠ مڠاول سمواڽ", "ککاياءن اداله سݢالا-ݢالاڽ"], ans: 0 },
+    { topic: "ڤلاجرن 6: تواضع", q: "اڤاکه مقصود تواضع ڤد بهاس؟", options: ["مرنده ديري", "سومبوڠ", "رياء", "تکبر"], ans: 0 },
+    { topic: "ڤلاجرن 6: تواضع", q: "تواضع دالم ايستيله تصوف اياله مرندهکن ديري کڤد الله دان تيدق...", options: ["مڠيڠکري کأبنرن", "ملاکوکن کباجيقن", "مڠحرمتي اورڠ توا", "مڠاجي القرءان"], ans: 0 },
+    { topic: "ڤلاجرن 6: تواضع", q: "لاون باݢي صيفت تواضع اياله...", options: ["تکبر (سومبوڠ)", "احسان", "رضا", "صبر"], ans: 0 },
+    { topic: "ڤلاجرن 6: تواضع", q: "انتارا فکتور ممبنتوق سيکڤ تواضع اياله مڠتأهوي...", options: ["عاقبة ددنيا دان بالسن دأخيرة جک برسیکڤ تکبر", "چارا اونتوق کاي", "نام-نام بيناتڠ", "سجاره نݢارا"], ans: 0 },
+    { topic: "ڤلاجرن 6: تواضع", q: "چيري اورڠ يڠ تواضع اياله...", options: ["مندهولوکن سلام کڤد اورڠ لاين", "سوک دڤوجي", "ممندڠ هين کڤد اورڠ مسکين", "سوک ماراه"], ans: 0 },
+    { topic: "ڤلاجرن 7: تفکر", q: "اڤاکه مقصود تفکر ڤد بهاس؟", options: ["برفيکير، ممرهاتيکن اتاو مننوڠ", "برجکڤ", "تيدور", "برلاي"], ans: 0 },
+    { topic: "ڤلاجرن 7: تفکر", q: "تفکر دالم إسلام منجاديکن سسأورڠ ايت لبيه...", options: ["دکت دان يقين کڤد کأݢوڠن الله", "جاوه دري الله", "سومبوڠ", "تکبر"], ans: 0 },
+    { topic: "ڤلاجرن 7: تفکر", q: "کيت دݢالقکن او نتوق برتفکر تنتڠ...", options: ["کجادين لاڠيت دان بومي", "ذات الله", "روڤا ملائکة", "بيلا برلاکوڽ قيامة"], ans: 0 },
+    { topic: "ڤلاجرن 7: تفکر", q: "تفکر يڠ دبنرکن اݢام اداله برفيکير تنتڠ چيڤتاءن الله. کيت دتݢه درڤد برفيکير تنتڠ...", options: ["ذات الله", "نعمت الله", "اوجين د دنيا", "کهيدوڤن د اخيرة"], ans: 0 },
+    { topic: "ڤلاجرن 7: تفکر", q: "کسن تفکر اياله منيمبولکن راس...", options: ["خوف (تاکوت) دان رجاء (هارڤ) کڤد الله", "ماره", "بڠݢ ديري", "کچيوا"], ans: 0 },
+    { topic: "ڤلاجرن 8: عجب", q: "عجب ڤد بهاس برمقصود...", options: ["حيران، کاݢوم", "ماره", "سديه", "تاکوت"], ans: 0 },
+    { topic: "ڤلاجرن 8: عجب", q: "عجب دالم ايستيله تصوف اياله...", options: ["براس کاݢوم ترهادڤ ديري سنديري دان ملوڤاكن حکوم الله", "برشکور کڤد الله", "مرنده ديري", "ممولياکن اورڠ لاين"], ans: 0 },
+    { topic: "ڤلاجرن 8: عجب", q: "انتارا سبب برلاکوڽ عجب اياله...", options: ["جاهيل ترهادڤ حقيقت ديري دان توهن", "راجين برعبادة", "سوک برسدقه", "سنتياس برشکور"], ans: 0 },
+    { topic: "ڤلاجرن 8: عجب", q: "کبوروقن عجب اياله...", options: ["ممبينساکن عملن کباجيقن دان ممباوا کڤد تکبر", "ممبوات اورڠ منجادي کاي", "منمبهکن ڤهالا", "ممربي ديري منجادي بيجقسانا"], ans: 0 },
+    { topic: "ڤلاجرن 8: عجب", q: "چارا مڠاتسي راس عجب اياله دڠن مڠيڠتي...", options: ["سݢالا نعمت يڠ دڤراوليهي اداله ميليق الله", "حکوم کاي", "کليبيهن ديري سنديری", "کبوروکن اورڠ لاين"], ans: 0 },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "سڠک بوروق (سوء الظن) برمقصود...", options: ["ملمڤرکن تودوهن کڤد سسأورڠ تنڤا بوقتي يڠ کوکوه", "مپڠکا بايق کڤد اورڠ لاين", "برتاڽ سؤالن", "ممبري نصيحت"], ans: 0 },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "سڠک بوروق يڠ دحرامکن يايت...", options: ["سڠک بوروق ترهادڤ الله دان ماءنسي يڠ بايق", "سڠك بوروق ترهادف اورڠ يڠ ملاکوکن معصية ترڠ-ترڠان", "سڠک بايق", "سڠک بوروق دالم ڤڤرڠن"], ans: 0 },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "سڠک بوروق ترهادڤ الله دحکومکن...", options: ["بردوسا بسر (حرام)", "سنة", "مکروه", "هاروس"], ans: 0 },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "سڠك بوروق يڠ دبنرکن (هاروس) اياله...", options: ["سڠک بوروق کڤد اورڠ يڠ ملاکوکن معصية ترڠ-ترڠان", "سڠک بوروق کڤد ايبو باڤ", "سڠک بوروق کڤد ݢورو", "سڠک بوروق کڤد امام مسجد"], ans: 0 },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "کسن سڠک بوروق بوليه ممباوا کڤد...", options: ["ڤرڤچاهن دالم مشارکت", "کهرمونين", "کاسيه سايڠ", "کاي"], ans: 0 },
+    { topic: "ڤلاجرن 10: بخيل", q: "بخيل ڤد بهاس برمقصود...", options: ["کيکوت، ڤليت، لوکيق", "ڤموره", "درماوان", "کاي"], ans: 0 },
+    { topic: "ڤلاجرن 10: بخيل", q: "بخيل دالم ايستيله تصوف يايت...", options: ["مناهن هرتا يڠ واجب دکلوارکن ڤد جالن يڠ دشريعتکن", "ممبري بنتوان کڤد اورڠ لاين", "مپيمڤن هرتا اونتوق ديري سنديري دڠن بتول", "ممباير زکاة"], ans: 0 },
+    { topic: "ڤلاجرن 10: بخيل", q: "جنيس بخيل يڠ ڤاليڠ بوروق دان دحکومکن بردوسا بسر اياله...", options: ["بخيل منونايكن کواجيفن يڠ دتتڤکن الله سڤرتي زکاة", "بخيل ڤد ديري سنديري", "بخيل دڠن بارڠ بوکن کڤرلوان", "بخيل ممبري صدقه سنة"], ans: 0 },
+    { topic: "ڤلاجرن 10: بخيل", q: "ڤونچا منجادي بخيل اياله...", options: ["سايڠکن هرتا دان تاکوت ميسکين", "تاکوت کڤد الله", "هندق ماسوق شرݢ", "منجاݢ کصيهتن"], ans: 0 },
+    { topic: "ڤلاجرن 10: بخيل", q: "عاقبة اورڠ يڠ بخيل اکن...", options: ["دبنچي اوليه الله دان ماءنسي", "دسايڠي الله", "منداڤت رحمة", "ماسوق شرݢ"], ans: 0 }
+];
+
+const structuredData = [
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "اڤاکه مقصود اخلاق منوروت بهاس؟", a: "ڤراڠاي، تيڠکه لاکو اتاو طبيعة." },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "اڤاکه مقصود اخلاق منوروت ايستيله شرع؟", a: "سسواتو کأداءن يڠ ترداڤت ددالم جيوا يڠ مڠحاصيلکن تيڠکه لاکو دڠن موده تنڤا ممرلوکن ڤروسيس ڤميکيرن دان ڤنليتين." },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "سنارايکن 4 سومبر اوتام علمو اخلاق إسلامية.", a: "القرءان، السنة، إجماع، دان قياس." },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "اڤاکه ڤربيذاءن انتارا اخلاق محمودة دان اخلاق مذمومة؟", a: "اخلاق محمودة يايت اخلاق يڠ بايق دان ترفوجي. اخلاق مذمومة يايت اخلاق يڠ بوروق دان ترچلا." },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "سنارايکن 2 کڤنتيڠن ممڤلاجري علمو اخلاق.", a: "1. سباݢاي ڤندوان اونتوق منيلاي تيندقن سام اد بايق اتاو بوروق. 2. ممبنتوق کمورنين جيوا. (اتاو مان-مان کڤنتيڠن دالم تيکس)." },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "اڤاکه مقصود عالم؟", a: "اڤ يڠ اد د لاڠيت دان د بومي سلاين دري الله تعالى." },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "سنارايکن 2 کڤنتيڠن ممليهارا عالم سکيتر.", a: "1. انوݢره الله يڠ ڤاليڠ بسر. 2. تندا کوجودن دان ککواساءن الله." },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "اڤاکه ڤونچا اوتام برلاکوڽ کروسقن عالم سکيتر؟", a: "حاصيل ڤربواتن ماءنسي ايت سنديري، سڤرتي سيکڤ طمع دان راکوس ترهادڤ سومبر عالم." },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "سنارايکن 3 بنتوق ڤنچمرن عالم سکيتر.", a: "ڤنچمرن اودارا، ڤنچمرن اءير، ڤنچمرن تانه، ڤنچمرن بوپي، ڤنچمرن باءو." },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "سنارايکن 2 چارا مليندوڠي عالم سکيتر.", a: "1. مماتوهي ڤراتورن يڠ تله دتتڤکن. 2. ممکسيماکن ڤڠݢوناءن باهن سمولا جادي دان کيتر سمولا." },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "اڤاکه مقصود ادب کچينتاءن کڤد نݢارا؟", a: "راس کاسيه سأورڠ ورݢانݢارا ترهادڤ نݢاراڽ سرتا بريکرار او نتوق ممڤرتاهنکنڽ دان برتڠݢوڠجواب ممباڠونکنڽ." },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "سنارايکن 2 ادب کچينتاءن کڤد نݢارا.", a: "1. سنتياس برشکور منجادي ورݢانݢارا. 2. طاعة دان ڤاتوه كڤد ڤمرينته يڠ عاديل." },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "سنارايکن 2 چارا منيڠکتکن راس چينتا ڤد نݢارا.", a: "1. مڠحياتي سيجاره نݢارا. 2. برکربان اونتوق نݢارا." },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "سنارايکن 2 کباجيقن منچينتاي نݢارا.", a: "1. مشارکت هيدوڤ هرموني. 2. نݢارا امان دان داماي." },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "سنارايکن 2 کבורوقن تيدق منچينتاي نݢارا.", a: "1. برلاکو کخيانن ترهادڤ نݢارا. 2. ايكونومي نݢارا اكن هنچور." },
+    { topic: "ڤلاجرن 4: احسان", q: "اڤاکه مقصود احسان ڤد بهاس؟", a: "بربوات کباجيقن (بوات بايق)." },
+    { topic: "ڤلاجرن 4: احسان", q: "اڤاکه مقصود احسان ڤد ايستيله (منوروت حديث جبريل)؟", a: "مپمبه الله سأوله-اوله کامو مليهت-ڽ، دان جک کامو تيدق مليهت-ڽ، مک يقينله بهاوا الله مليهت کامو." },
+    { topic: "ڤلاجرن 4: احسان", q: "سنارايکن 3 اسڤيک اوتام دالم احسان.", a: "احسان دالم عبادة، احسان دالم معملة (مواملة)، دان احسان دالم اخلاق." },
+    { topic: "ڤلاجرن 4: احسان", q: "بريکن 1 چونتوه احسان دالم معملة.", a: "جوجور دان امانه دالم اوروسن ڤرنياݢاءن." },
+    { topic: "ڤلاجرن 4: احسان", q: "سنارايکن 2 کلبيهن برصيفت احسان.", a: "1. منداڤت رحمة دان کاسيه سايڠ الله. 2. ديقيني دان دکاسيهي اوليه مشارکت." },
+    { topic: "ڤلاجرن 5: رضا", q: "اڤاکه مقصود رضا ڤد بهاس؟", a: "سوک دان کلاڤڠن هاتي." },
+    { topic: "ڤلاجرن 5: رضا", q: "اڤاکه مقصود رضا دالم ايستيله تصوف؟", a: "منريما دڠن تنڠ سݢالا کجادين يڠ دتتڤکن اوليه الله سبحانه وتعالى (قضاء دان قدر)." },
+    { topic: "ڤلاجرن 5: رضا", q: "اڤاکه حکوم منچاري رضا الله؟", a: "واجب." },
+    { topic: "ڤلاجرن 5: رضا", q: "سنارايکن 2 ڤمبهاݢين صيفت رضا.", a: "1. رضا منريما تکليف (ڤرينته شرع). 2. رضا ترهادڤ قضاء دان قدر." },
+    { topic: "ڤلاجرن 5: رضا", q: "سنارايکن 2 حکمه برصيفت رضا.", a: "1. منداڤت رحمة دان کريضاءن الله. 2. جيوا منجادي تنڠ دان هيدوڤ بهاݢيا." },
+    { topic: "ڤلاجرن 6: تواضع", q: "اڤاکه مقصود تواضع ڤد بهاس؟", a: "مرنده ديري." },
+    { topic: "ڤلاجرن 6: تواضع", q: "اڤاکه مقصود تواضع دالم ايستيله تصوف؟", a: "مرندهکن ديري کڤد الله دان تيدق مڠيڠکري کأبنرن يڠ داتڠ دري-ڽ." },
+    { topic: "ڤلاجرن 6: تواضع", q: "سنارايکن 2 فکتور يڠ ممبنتوق سيکڤ تواضع.", a: "1. ميقيني کأݢوڠن دان ککواساءن الله. 2. مڠتأهوي عاقبة د دنيا دان بالسن د اخيرة باݢي اورڠ يڠ تکبر." },
+    { topic: "ڤلاجرن 6: تواضع", q: "سنارايکن 2 چيري اورڠ يڠ تواضع.", a: "1. مندهولوکن سلام کڤد اورڠ لاين. 2. تيدق سوک دڤوجي دان دسانجوڠ." },
+    { topic: "ڤلاجرن 6: تواضع", q: "تواضع دالم عبادة برمقصود...", a: "ملاکوکن عبادة دڠن خشوع، اخلاص دان مرنده ديري کڤد الله." },
+    { topic: "ڤلاجرن 7: تفکر", q: "اڤاکه مقصود تفکر ڤد بهاس؟", a: "برفيکير، ممرهاتيکن اتاو مننوڠ." },
+    { topic: "ڤلاجرن 7: تفکر", q: "اڤاکه مقصود تفکر ڤد ايستيله؟", a: "ممرهاتيکن دڠن تليتي دان مميکيرکن چيڤتاءن الله او نتوق منمبهکن کأيمانن." },
+    { topic: "ڤلاجرن 7: تفکر", q: "سنارايکن 2 فوکوس تفکر يڠ دݢالقکن دالم القرءان.", a: "1. کجادين لاڠيت دان بومي. 2. کجادين ماءنسي." },
+    { topic: "ڤلاجرن 7: تفکر", q: "اڤاکه ڤرکارا يڠ دتݢه (دلارڠ) اونتوق دتفکرکن؟", a: "ذات الله سبحانه وتعالى." },
+    { topic: "ڤلاجرن 7: تفکر", q: "سنارايکن 2 کسن دان حاصيل دري تفکر.", a: "1. منمبهکن کأيمانن دان کيقينن کڤد الله. 2. منيمبولکن راس خوف (تاکوت) دان رجاء (هارڤ) کڤد الله." },
+    { topic: "ڤلاجرن 8: عجب", q: "اڤاکه مقصود عجب ڤد بهاس؟", a: "حيران، کاݢوم." },
+    { topic: "ڤلاجرن 8: عجب", q: "اڤاکه مقصود عجب دالم ايستيله تصوف؟", a: "براس کاݢوم ترهادڤ ديري سنديري دان ملوڤاكن حکوم الله (مرسا هيبت ديري سنديري)." },
+    { topic: "ڤلاجرن 8: عجب", q: "سنارايکن 2 سبب برلاکوڽ عجب.", a: "1. جاهيل ترهادڤ حقيقت ديري دان توهن. 2. بڠݢ دڠن ککاياءن اتاو کترونن." },
+    { topic: "ڤلاجرن 8: عجب", q: "سنارايکن 2 کבורوقن عجب.", a: "1. ممبينساکن عملن کباجيقن. 2. ممباوا کڤد صيفت تکبر." },
+    { topic: "ڤلاجرن 8: عجب", q: "باݢايمان چارا مڠاتسي راس عجب؟", a: "دڠن مڠيڠتي بهاوا سݢالا نعمت يڠ دڤراوليهي اداله ميليق الله دان بوليه دتاريق بيلا-بيلا ماس." },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "اڤاکه مقصود سڠک بوروق (سوء الظن) ڤد بهاس؟", a: "تودوهن يڠ تيدق براساس." },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "اڤاکه مقصود سڠک بوروق دالم ايستيله تصوف؟", a: "ملمڤرکن تودوهن کڤد سسأورڠ تنڤا بوقتي يڠ کوکوه." },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "سنارايکن 2 جنيس سڠک بوروق يڠ دحرامکن.", a: "1. سڠک بوروق ترهادڤ الله. 2. سڠک بوروق ترهادڤ ماءنسي يڠ بايق." },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "اڤاکه سڠک بوروق يڠ دبنرکن (هاروس)؟", a: "سڠک بوروق کڤد اورڠ يڠ ملاکوکن کجاهتن/معصية دڠن ترڠ-ترڠان." },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "سنارايکن 2 کسن سڠک بوروق.", a: "1. ممباوا کڤد ڤرڤچاهن دالم مشارکت. 2. منيمبولکن فيتنه دان ڤرموسوهن." },
+    { topic: "ڤلاجرن 10: بخيل", q: "اڤاکه مقصود بخيل ڤد بهاس؟", a: "کيکوت، ڤليت، لوکيق." },
+    { topic: "ڤلاجرن 10: بخيل", q: "اڤاکه مقصود بخيل دالم ايستيله تصوف؟", a: "مناهن (تيدق ممبري) هرتا يڠ واجب دکلوارکن ڤد جالن يڠ دشريعتکن." },
+    { topic: "ڤلاجرن 10: بخيل", q: "سنارايکن 2 جنيس بخيل.", a: "1. بخيل منونايكن کواجيفن يڠ دتتڤکن الله (سڤرتي زکاة). 2. بخيل ڤد ديري سنديري." },
+    { topic: "ڤلاجرن 10: بخيل", q: "اڤاکه ڤونچا منجادي بخيل؟", a: "سايڠکن هرتا دان تاکوت ميسکين." },
+    { topic: "ڤلاجرن 10: بخيل", q: "سنارايکن 2 عاقبة (کבורوقن) بخيل.", a: "1. دبنچي اوليه الله دان ماءنسي. 2. منداڤت عذاب د اخيرة." }
+];
+
+const trueFalseData = [
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "اخلاق ڤد بهاس برارتي ڤراڠاي دان تيڠکه لاکو اتاو طبيعة.", a: true },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "اخلاق يڠ ترفوجي منوروت شرع دناماکن اخلاق مذمومة.", a: false },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "القرءان دان السنة اداله سومبر اوتام علمو اخلاق إسلامية.", a: true },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "ممڤلاجري علمو اخلاق تيدق ڤنتيڠ دالم کهيدوڤن سهارين.", a: false },
+    { topic: "ڤلاجرن 1: علمو اخلاق", q: "اخلاق يڠ بايق داڤت ممبنتوق کمورنين دان کسوچين ديري.", a: true },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "عالم سکيتر مروڤاکن چيڤتاءن الله او نتوق ماءنسي.", a: true },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "ماءنسي تيدق برتڠݢوڠجواب منجاݢ عالم سکيتر.", a: false },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "کروسقن عالم سکيتر باڽق برڤونچا درڤد تيندقن ماءنسي سنديري.", a: true },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "ڤنچمرن اودارا تيدق منججسکن کصيحتن ماءنسي.", a: false },
+    { topic: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", q: "عملن کيتار سمولا (recycle) اداله ساله ساتو چارا مليندوڠي عالم سکيتر.", a: true },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "منچينتاي نݢارا اداله سبهاݢين دريڤد تونتوتن اݢام.", a: true },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "نبي محمد صلى الله عليه وسلم تيدق مپايڠي تمڤت کلاهيرن بݢيندا.", a: false },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "اورڠ يڠ منچينتاي نݢارا اکن مماتوهي اوندڠ-اوندڠ نݢارا.", a: true },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "ممبوروکن نام نݢارا د لوار نݢارا اداله چيري کچينتاءن ڤد نݢارا.", a: false },
+    { topic: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", q: "کچينتاءن ڤد نݢارا اکن ملاهيرکن مشارکت يڠ هرموني.", a: true },
+    { topic: "ڤلاجرن 4: احسان", q: "احسان برمقصود بوات جاهت کڤد اورڠ لاين.", a: false },
+    { topic: "ڤلاجرن 4: احسان", q: "احسان دالم عبادة يايت مپمبه الله سأوله-اوله کيت مليهت-ڽ.", a: true },
+    { topic: "ڤلاجرن 4: احسان", q: "صيفت احسان هاڽ ڤرلو دالم عبادة صلاة سهاج.", a: false },
+    { topic: "ڤلاجرن 4: احسان", q: "اورڠ يڠ برصيفت احسان اکن جوجور دالم اوروسن ڤرنياݢاءن (معملة).", a: true },
+    { topic: "ڤلاجرن 4: احسان", q: "الله ساڠت مپوکاءي اورڠ يڠ بربوات احسان.", a: true },
+    { topic: "ڤلاجرن 5: رضا", q: "رضا برمقصود منريما دڠن تنڠ سݢالا کجادين يڠ دتتڤکن اوليه الله.", a: true },
+    { topic: "ڤلاجرن 5: رضا", q: "کيت بوليه برسديه دان مراتڤي مصيبة سهيڠݢ مپالهکن الله.", a: false },
+    { topic: "ڤلاجرن 5: رضا", q: "منچاري رضا ماءنسي لبيه ڤنتيڠ دريڤد منچاري رضا الله.", a: false },
+    { topic: "ڤلاجرن 5: رضا", q: "اورڠ يڠ رضا اکن سنتياس برشکور کڤد الله.", a: true },
+    { topic: "ڤلاجرن 5: رضا", q: "رضا اکن ممبريکن کتنڠن جيوا کڤد سسأورڠ.", a: true },
+    { topic: "ڤلاجرن 6: تواضع", q: "تواضع برمقصود مرنده ديري.", a: true },
+    { topic: "ڤلاجرن 6: تواضع", q: "اورڠ يڠ تواضع سوک دڤوجي دان دسانجوڠ.", a: false },
+    { topic: "ڤلاجرن 6: تواضع", q: "تواضع اداله لاون کڤد صيفت تکبر (سومبوڠ).", a: true },
+    { topic: "ڤلاجرن 6: تواضع", q: "کيت بوليه برسيکڤ سومبوڠ کڤد اورڠ يڠ ميسکين.", a: false },
+    { topic: "ڤلاجرن 6: تواضع", q: "تواضع دالم عبادة برمقصود ملاکوکن عبادة دڠن خشوع دان اخلاص.", a: true },
+    { topic: "ڤلاجرن 7: تفکر", q: "تفکر برمقصود برفيکير دان ممرهاتيکن چيڤتاءن الله.", a: true },
+    { topic: "ڤلاجرن 7: تفکر", q: "إسلام ملارڠ اومتڽ برتفکر.", a: false },
+    { topic: "ڤلاجرن 7: تفکر", q: "کيت دݢالقکن برتفکر تنتڠ کجادين لاڠيت دان بومي.", a: true },
+    { topic: "ڤلاجرن 7: تفکر", q: "کيت دبنرکن برتفکر (مميکيرکن) تنتڠ ذات الله.", a: false },
+    { topic: "ڤلاجرن 7: تفکر", q: "تفکر اکن منمبهکن کأيمانن کڤد الله.", a: true },
+    { topic: "ڤلاجرن 8: عجب", q: "عجب برمقصود مراسا کاݢوم ترهادڤ ديري سنديري.", a: true },
+    { topic: "ڤلاجرن 8: عجب", q: "عجب اداله صيفت يڠ ترفوجي.", a: false },
+    { topic: "ڤلاجرن 8: عجب", q: "عجب بوليه ممبينساکن عملن کباجيقن.", a: true },
+    { topic: "ڤلاجرن 8: عجب", q: "اورڠ يڠ عجب اکن منجادي تکبر.", a: true },
+    { topic: "ڤلاجرن 8: عجب", q: "کيت بوليه مراسا عجب دڠن ککاياءن يڠ کيت ميليقي.", a: false },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "سڠک بوروق اداله ملمڤرکن تودوهن تنڤا بوقتي يڠ کوکوه.", a: true },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "سڠک بوروق ترهادڤ الله اداله حرام.", a: true },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "کيت دهاروسکن سڠک بوروق ترهادڤ اورڠ يڠ ملاکوکن معصية ترڠ-ترڠان.", a: true },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "سڠک بوروق اکن منيمبولکن فيتنه دان ڤرموسوهن.", a: true },
+    { topic: "ڤلاجرن 9: سڠک بوروق", q: "سڠک بوروق ممباوا کڤد ڤرڤچاهن مشارکت.", a: true },
+    { topic: "ڤلاجرن 10: بخيل", q: "بخيل برمقصود ڤموره دان درماوان.", a: false },
+    { topic: "ڤلاجرن 10: بخيل", q: "بخيل اداله مناهن دريڤد ممبري هرتا يڠ واجب دکلوارکن.", a: true },
+    { topic: "ڤلاجرن 10: بخيل", q: "اورڠ يڠ بخيل اکن دکاسيهي اوليه الله.", a: false },
+    { topic: "ڤلاجرن 10: بخيل", q: "بخيل ڤد ديري سنديري جوݢ دحرامکن.", a: true },
+    { topic: "ڤلاجرن 10: بخيل", q: "اورڠ يڠ بخيل اکن منداڤت عذاب د اخيرة.", a: true }
+];
+
+const mindMapData = [
+    { // 0: Pelajaran 1
+        text: "ڤلاجرن 1: علمو اخلاق", level: 1,
+        children: [
+            { text: "ڤڠرتين", level: 2, children: [
+                { text: "بهاس: ڤراڠاي، تيڠکه لاکو اتاو طبيعة.", level: 3 },
+                { text: "ايستيله: کأداءن جيوا يڠ مڠحاصيلکن تيڠکه لاکو دڠن موده تنڤا ڤميکيرن.", level: 3 }
+            ]},
+            { text: "بهاݢين اخلاق", level: 2, children: [
+                { text: "اخلاق محمودة (بايق/ترفوجي)", level: 3 },
+                { text: "اخلاق مذمومة (بوروق/ترچلا)", level: 3 }
+            ]},
+            { text: "سومبر اوتام", level: 2, children: [
+                { text: "القرءان", level: 3 },
+                { text: "السنة", level: 3 },
+                { text: "إجماع", level: 3 },
+                { text: "قياس", level: 3 }
+            ]},
+            { text: "کڤنتيڠن & کلبيهن", level: 2, children: [
+                { text: "ڤندوان منيلاي تيندقن", level: 3 },
+                { text: "ممبنتوق کمورنين جيوا", level: 3 },
+                { text: "ممبينا کلوارݢ سکينة & مشارکة هرموني", level: 3 }
+            ]}
+        ]
+    },
+    { // 1: Pelajaran 2
+        text: "ڤلاجرن 2: ادب ترهادڤ عالم سکيتر", level: 1,
+        children: [
+            { text: "مقصود عالم", level: 2, children: [
+                { text: "اڤ يڠ اد د لاڠيت دان دبومي سلاين دري الله.", level: 3 }
+            ]},
+            { text: "کڤنتيڠن منجاݢ عالم", level: 2, children: [
+                { text: "انوݢره الله يڠ ڤاليڠ بسر.", level: 3 },
+                { text: "تندا کوجودن دان ککواساءن الله.", level: 3 }
+            ]},
+            { text: "ڤونچا کروسقن", level: 2, children: [
+                { text: "حاصيل ڤربواتن ماءنسي", level: 3 },
+                { text: "سيکڤ طمع & راکوس", level: 3 }
+            ]},
+            { text: "بنتوق ڤنچمرن", level: 2, children: [
+                { text: "اودارا، اءير، تانه، بوپي، باءو", level: 3 }
+            ]}
+        ]
+    },
+    { // 2: Pelajaran 3
+        text: "ڤلاجرن 3: ادب کچينتاءن ڤد نݢارا", level: 1,
+        children: [
+            { text: "مقصود کچينتاءن", level: 2, children: [
+                { text: "راس کاسيه ورݢانݢارا ترهادڤ نݢاراڽ.", level: 3 }
+            ]},
+            { text: "ادب ترهادڤ نݢارا", level: 2, children: [
+                { text: "برشکور منجادي ورݢانݢارا.", level: 3 },
+                { text: "طاعة کڤد ڤمرينته.", level: 3 }
+            ]},
+            { text: "چارا منيڠکتکن چينتا", level: 2, children: [
+                { text: "مڠحياتي سيجاره نݢارا.", level: 3 },
+                { text: "برکربان اونتوق نݢارا.", level: 3 }
+            ]}
+        ]
+    },
+    { // 3: Pelajaran 4
+        text: "ڤلاجرن 4: احسان", level: 1,
+        children: [
+            { text: "ڤڠرتين", level: 2, children: [
+                { text: "بهاس: بربوات کباجيقن.", level: 3 },
+                { text: "ايستيله: مپمبه الله سأوله-اوله مليهت-ڽ.", level: 3 }
+            ]},
+            { text: "اسڤيک احسان", level: 2, children: [
+                { text: "دالم عبادة (خشوع & اخلاص)", level: 3 },
+                { text: "دالم معملة (جوجور & امانه)", level: 3 },
+                { text: "دالم اخلاق (بربوات بايق)", level: 3 }
+            ]},
+            { text: "کلبيهن", level: 2, children: [
+                { text: "منداڤت رحمة دان کاسيه سايڠ الله.", level: 3 }
+            ]}
+        ]
+    },
+    { // 4: Pelajaran 5
+        text: "ڤلاجرن 5: رضا", level: 1,
+        children: [
+            { text: "ڤڠرتين", level: 2, children: [
+                { text: "بهاس: سوک دان کلاڤڠن هاتي.", level: 3 },
+                { text: "ايستيله: منريما دڠن تنڠ سݢالا کجادين يڠ دتتڤکن الله.", level: 3 }
+            ]},
+            { text: "ڤمبهاݢين رضا", level: 2, children: [
+                { text: "تکليف (ڤرينته شرع)", level: 3 },
+                { text: "قضاء دان قدر", level: 3 }
+            ]},
+            { text: "حکمه", level: 2, children: [
+                { text: "منداڤت رضا الله.", level: 3 },
+                { text: "جيوا تنڠ & هيدوڤ بهاݢيا.", level: 3 }
+            ]}
+        ]
+    },
+    { // 5: Pelajaran 6
+        text: "ڤلاجرن 6: تواضع", level: 1,
+        children: [
+            { text: "ڤڠرتين", level: 2, children: [
+                { text: "بهاس: مرنده ديري.", level: 3 },
+                { text: "ايستيله: مرندهکن ديري کڤد الله & تيدق مڠيڠکري کأبنرن.", level: 3 }
+            ]},
+            { text: "چيري تواضع", level: 2, children: [
+                { text: "مندهولوکن سلام.", level: 3 },
+                { text: "تيدق سوک دڤوجي/دسانجوڠ.", level: 3 }
+            ]},
+            { text: "لاون", level: 2, children: [
+                { text: "تکبر (سومبوڠ)", level: 3 }
+            ]}
+        ]
+    },
+    { // 6: Pelajaran 7
+        text: "ڤلاجرن 7: تفکر", level: 1,
+        children: [
+            { text: "ڤڠرتين", level: 2, children: [
+                { text: "بهاس: برفيکير، ممرهاتيکن، مننوڠ.", level: 3 },
+                { text: "ايستيله: مميکيرکن چيڤتاءن الله اونتوق منمبهکن ايمان.", level: 3 }
+            ]},
+            { text: "فوکوس تفکر", level: 2, children: [
+                { text: "کجادين لاڠيت دان بومي.", level: 3 },
+                { text: "کجادين ماءنسي.", level: 3 }
+            ]},
+            { text: "دلارڠ (دتݢه)", level: 2, children: [
+                { text: "برفيکير تنتڠ ذات الله.", level: 3 }
+            ]}
+        ]
+    },
+    { // 7: Pelajaran 8
+        text: "ڤلاجرن 8: عجب", level: 1,
+        children: [
+            { text: "ڤڠرتين", level: 2, children: [
+                { text: "بهاس: حيران، کاݢوم.", level: 3 },
+                { text: "ايستيله: ککاݢومن ترهادڤ ديري سنديري & ملوڤاکن الله.", level: 3 }
+            ]},
+            { text: "سبب برلاکو", level: 2, children: [
+                { text: "جاهيل حقيقت ديري & توهن.", level: 3 },
+                { text: "بڠݢ دڠن ککاياءن/کتورونن.", level: 3 }
+            ]},
+            { text: "کبوروقن", level: 2, children: [
+                { text: "ممبينساکن عملن کباجيقن.", level: 3 },
+                { text: "ممباوا کڤد تکبر.", level: 3 }
+            ]}
+        ]
+    },
+    { // 8: Pelajaran 9
+        text: "ڤلاجرن 9: سڠک بوروق", level: 1,
+        children: [
+            { text: "ڤڠرتين", level: 2, children: [
+                { text: "بهاس: تودوهن تيدق براساس.", level: 3 },
+                { text: "ايستيله: ملمڤرکن تودوهن تنڤا بوقتي يڠ کوکوه.", level: 3 }
+            ]},
+            { text: "جنيس", level: 2, children: [
+                { text: "حرام: ترهادڤ الله & ماءنسي يڠ بايق.", level: 3 },
+                { text: "هاروس: ترهادڤ اورڠ يڠ ملاکوکن معصية ترڠ-ترڠان.", level: 3 }
+            ]},
+            { text: "کسن", level: 2, children: [
+                { text: "ڤرڤچاهن مشارکت.", level: 3 },
+                { text: "فيتنه & ڤرموسوهن.", level: 3 }
+            ]}
+        ]
+    },
+    { // 9: Pelajaran 10
+        text: "ڤلاجرن 10: بخيل", level: 1,
+        children: [
+            { text: "ڤڠرتين", level: 2, children: [
+                { text: "بهاس: کيکوت، ڤليت، لوکيق.", level: 3 },
+                { text: "ايستيله: مناهن هرتا يڠ واجب دکلوارکن ڤد جالن يڠ دشريعتکن.", level: 3 }
+            ]},
+            { text: "جنيس", level: 2, children: [
+                { text: "بخيل منونايكن کواجيفن (زکاة).", level: 3 },
+                { text: "بخيل ڤد ديري سنديري.", level: 3 }
+            ]},
+            { text: "عاقبة", level: 2, children: [
+                { text: "دبنچي الله دان ماءنسي.", level: 3 },
+                { text: "منداڤت عذاب د اخيرة.", level: 3 }
+            ]}
+        ]
+    }
+];
+
+const matchData = [
+    // Level 1: Pengenalan Akhlak & Alam Sekitar
+    [{ desc: "تيڠکه لاکو يڠ دحاصيلکن دڠن موده", term: "اخلاق" }, { desc: "اخلاق يڠ بايق دان ترفوجي", term: "محمودة" }, { desc: "اخلاق يڠ بوروق دان ترچلا", term: "مذمومة" }, { desc: "سومبر اوتام اخلاق", term: "القرءان & السنة" }, { desc: "اڤ يڠ اد د لاڠيت & بومي سلاين الله", term: "عالم" }, { desc: "انوݢره الله يڠ ڤاليڠ بسر", term: "عالم سکيتر" }, { desc: "ڤونچا کروسقن عالم", term: "ڤربواتن ماءنسي" }, { desc: "منججسکن کصيحتن ماءنسي", term: "ڤنچمرن اودارا" }, { desc: "کموسنهن هيدوڤن اءير", term: "ڤنچمرن اءير" }, { desc: "ممبونوه ميکرو اورݢانيسما", term: "ڤنچمرن تانه" }],
+    // Level 2: Negara & Ihsan
+    [{ desc: "راس کاسيه ترهادڤ نݢارا", term: "کچينتاءن ڤد نݢارا" }, { desc: "تمڤت کلاهيرن نبي محمد", term: "مكة" }, { desc: "ممڤرتاهنکن نݢارا", term: "ادب کچينتاءن" }, { desc: "بربوات کباجيقن", term: "احسان (بهاس)" }, { desc: "مپمبه سأوله-اوله مليهت الله", term: "احسان (ايستيله)" }, { desc: "اخلاص & خشوع", term: "احسان دالم عبادة" }, { desc: "جوجور & امانه", term: "احسان دالم معملة" }, { desc: "منداڤت کاسيه سايڠ الله", term: "کلبيهن احسان" }, { desc: "هيدوڤ هرموني", term: "کلبيهن چينتاءن نݢارا" }, { desc: "کخيانن", term: "کبوروقن تيدق چينتا نݢارا" }],
+    // Level 3: Redha & Tawaduk
+    [{ desc: "سوک & کلاڤڠن هاتي", term: "رضا (بهاس)" }, { desc: "منريما دڠن تنڠ کجادين الله", term: "رضا (ايستيله)" }, { desc: "منچاري رضا ماءنسي", term: "حرام (رياء)" }, { desc: "رضا منريما تکليف", term: "ملاکوکن ڤرينته شرع" }, { desc: "مرنده ديري", term: "تواضع (بهاس)" }, { desc: "مرندهکن ديري کڤد الله", term: "تواضع (ايستيله)" }, { desc: "لاون تواضع", term: "تکبر (سومبوڠ)" }, { desc: "مندهولوکن سلام", term: "چيري تواضع" }, { desc: "تيدق سوک دڤوجي", term: "چيري تواضع" }, { desc: "جيوا تنڠ", term: "کلبيهن رضا" }],
+    // Level 4: Tafakur & Ujub
+    [{ desc: "برفيکير / ممرهاتيکن", term: "تفکر (بهاس)" }, { desc: "مميکيرکن چيڤتاءن الله", term: "تفکر (ايستيله)" }, { desc: "فوکوس تفکر", term: "کجادين لاڠيت & بومي" }, { desc: "دلارڠ (دتݢه) دتفکرکن", term: "ذات الله" }, { desc: "حاصيل تفکر", term: "کيقينن کڤد الله" }, { desc: "حيران / کاݢوم", term: "عجب (بهاس)" }, { desc: "کاݢوم ترهادڤ ديري سنديري", term: "عجب (ايستيله)" }, { desc: "ڤونچا عجب", term: "جاهيل ديري & توهن" }, { desc: "کبوروقن عجب", term: "ممبينساکن عملن" }, { desc: "سبب عجب", term: "بڠݢ دڠن ککاياءن" }],
+    // Level 5: Sangka Buruk & Bakhil
+    [{ desc: "تودوهن تيدق براساس", term: "سڠک بوروق (بهاس)" }, { desc: "ملمڤرکن تودوهن تنڤا بوقتي", term: "سوء الظن (ايستيله)" }, { desc: "سڠک بوروق يڠ دحرامکن", term: "ترهادڤ الله / ماءنسي بايق" }, { desc: "سڠک بوروق يڠ دهاروسکن", term: "ترهادڤ ڤلاکو معصية" }, { desc: "کسن سڠک بوروق", term: "فيتنه & ڤرموسوهن" }, { desc: "کيکوت / ڤليت / لوکيق", term: "بخيل (بهاس)" }, { desc: "مناهن هرتا يڠ واجب دکلوارکن", term: "بخيل (ايستيله)" }, { desc: "کبوروقن بخيل", term: "دبنچي الله & ماءنسي" }, { desc: "ڤونچا بخيل", term: "سايڠکن هرتا & تاکوت ميسکين" }, { desc: "جنيس بخيل ڤاليڠ بوروق", term: "بخيل منونايكن کواجيفن (زکاة)" }]
+];
+
+let currentView = 'home';
+let objInitialized = false; let currentObjIndex = 0; let userObjAnswers = []; let correctObjCount = 0; let shuffledObjOptionsStore = [];
+let strSidebarInitialized = false; let currentStrIndex = 0;
+let tfInitialized = false; let currentTfIndex = 0; let userTfAnswers = []; let correctTfCount = 0;
+let matchInitialized = false; let currentMatchLevel = 0; let selectedMatchLeft = null; let matchedPairsCount = 0;
+
+function switchView(viewName) {
+    ['home-screen', 'objective-app', 'structured-app', 'truefalse-app', 'mindmap-app', 'match-app'].forEach(v => document.getElementById(v).classList.add('hidden'));
+    
+    if (viewName === 'home') document.getElementById('home-screen').classList.remove('hidden');
+    else if (viewName === 'objective') { document.getElementById('objective-app').classList.remove('hidden'); if(!objInitialized) initObjective(); }
+    else if (viewName === 'structured') { document.getElementById('structured-app').classList.remove('hidden'); if(!strSidebarInitialized) initStructured(); }
+    else if (viewName === 'truefalse') { document.getElementById('truefalse-app').classList.remove('hidden'); if(!tfInitialized) initTrueFalse(); }
+    else if (viewName === 'mindmap') { document.getElementById('mindmap-app').classList.remove('hidden'); renderMindMap(0); }
+    else if (viewName === 'match') { document.getElementById('match-app').classList.remove('hidden'); if(!matchInitialized) initMatch(); }
+}
+
+function showModal(title, message, iconClass = 'fa-info-circle', iconColor = 'text-blue-500') {
+    document.getElementById('modalTitle').innerText = title; document.getElementById('modalMessage').innerText = message;
+    document.getElementById('modalIcon').className = `${iconColor} text-5xl mb-4`; document.getElementById('modalIcon').innerHTML = `<i class="fas ${iconClass}"></i>`;
+    document.getElementById('customModal').classList.remove('hidden');
+}
+function closeModal() { document.getElementById('customModal').classList.add('hidden'); }
+function toggleSidebar(mod) {
+    const sb = document.getElementById(`${mod}-sidebar`); const mo = document.getElementById(`${mod}MobileOverlay`);
+    if (sb.classList.contains('translate-x-full')) { sb.classList.remove('translate-x-full'); mo.classList.remove('hidden'); } 
+    else { sb.classList.add('translate-x-full'); mo.classList.add('hidden'); }
+}
+function nextQuestion(mod) {
+    if (mod === 'obj' && currentObjIndex < objectiveData.length - 1) loadObjQuestion(currentObjIndex + 1);
+    else if (mod === 'str' && currentStrIndex < structuredData.length - 1) loadStrQuestion(currentStrIndex + 1);
+    else if (mod === 'tf' && currentTfIndex < trueFalseData.length - 1) loadTfQuestion(currentTfIndex + 1);
+}
+function prevQuestion(mod) {
+    if (mod === 'obj' && currentObjIndex > 0) loadObjQuestion(currentObjIndex - 1);
+    else if (mod === 'str' && currentStrIndex > 0) loadStrQuestion(currentStrIndex - 1);
+    else if (mod === 'tf' && currentTfIndex > 0) loadTfQuestion(currentTfIndex - 1);
+}
+
+function initObjective() {
+    userObjAnswers = new Array(objectiveData.length).fill(null); correctObjCount = 0; shuffledObjOptionsStore = [];
+    objectiveData.forEach((q, index) => {
+        let optionsWithMeta = q.options.map((opt, i) => ({ text: opt, isCorrect: i === q.ans }));
+        for (let i = optionsWithMeta.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [optionsWithMeta[i], optionsWithMeta[j]] = [optionsWithMeta[j], optionsWithMeta[i]]; }
+        shuffledObjOptionsStore[index] = optionsWithMeta;
+    });
+    renderObjSidebar(); loadObjQuestion(0); objInitialized = true;
+}
+function renderObjSidebar() {
+    const menu = document.getElementById('obj-sidebarMenu'); let currentTopic = ""; let menuHTML = "";
+    objectiveData.forEach((item, index) => {
+        if(item.topic !== currentTopic) { if(currentTopic !== "") menuHTML += `</div></div>`; currentTopic = item.topic; menuHTML += `<div class="mb-2"><h4 class="font-jawi text-xl text-blue-900 font-bold mb-3 bg-blue-50 p-2 rounded border-r-4 border-blue-400">${currentTopic}</h4><div class="grid grid-cols-5 gap-2 pr-2">`; }
+        let btnClass = "border-slate-200 text-slate-600 hover:bg-blue-100 bg-white";
+        if (userObjAnswers[index] !== null) btnClass = shuffledObjOptionsStore[index][userObjAnswers[index]].isCorrect ? "border-green-500 bg-green-500 text-white" : "border-red-500 bg-red-500 text-white";
+        menuHTML += `<button onclick="loadObjQuestion(${index})" id="objBtn-${index}" class="w-10 h-10 flex items-center justify-center rounded-lg border-2 font-bold transition-all font-sans text-sm ${btnClass}">${index + 1}</button>`;
+    }); menuHTML += `</div></div>`; menu.innerHTML = menuHTML;
+}
+function loadObjQuestion(index) {
+    if(index < 0 || index >= objectiveData.length) return; currentObjIndex = index; const item = objectiveData[index]; const options = shuffledObjOptionsStore[index];
+    document.getElementById('obj-questionText').innerText = item.q; document.getElementById('obj-qNumberBadge').innerText = `سوءالن ${index + 1} / ${objectiveData.length}`; document.getElementById('obj-qCategoryBadge').innerText = item.topic.split(':')[1] ? item.topic.split(':')[1].trim().toUpperCase() : item.topic.toUpperCase(); document.getElementById('obj-headerTopicIndicator').innerText = item.topic;
+    const isAnswered = userObjAnswers[index] !== null; const fbBox = document.getElementById('obj-feedbackBox'); const optionsContainer = document.getElementById('obj-optionsContainer'); optionsContainer.innerHTML = '';
+    options.forEach((opt, optIndex) => {
+        const btn = document.createElement('button'); let extraClasses = 'bg-white border-2 border-slate-200 text-slate-800 hover:border-blue-500 hover:bg-blue-50';
+        if (isAnswered) { btn.disabled = true; extraClasses = 'bg-white border-2 border-slate-200 text-slate-400 disabled-option cursor-not-allowed'; if (optIndex === userObjAnswers[index]) extraClasses = opt.isCorrect ? 'correct-ans border-green-500' : 'wrong-ans border-red-500'; else if (opt.isCorrect) extraClasses = 'correct-ans border-green-500'; }
+        btn.className = `w-full text-right p-5 rounded-2xl font-bold font-jawi text-2xl md:text-3xl flex items-center leading-loose option-btn ${extraClasses}`;
+        btn.innerHTML = `<span class="inline-block w-10 h-10 rounded-full bg-slate-100 text-center leading-10 ml-5 font-bold text-slate-500 flex-shrink-0 font-sans text-xl" style="${extraClasses.includes('-ans') ? 'background-color:rgba(255,255,255,0.2);color:white;' : ''}">${String.fromCharCode(65 + optIndex)}</span> <span>${opt.text}</span>`;
+        if (!isAnswered) btn.onclick = () => selectObjAnswer(optIndex, index); optionsContainer.appendChild(btn);
+    });
+    if (isAnswered) { fbBox.classList.remove('hidden'); if (options[userObjAnswers[index]].isCorrect) { fbBox.className = "mt-8 p-6 rounded-2xl border-2 font-jawi text-2xl md:text-3xl font-bold flex items-center gap-4 fade-in bg-green-50 text-green-700 border-green-200"; fbBox.innerHTML = '<i class="fas fa-check-circle text-4xl"></i> جواڤن اندا تڤت!'; } else { fbBox.className = "mt-8 p-6 rounded-2xl border-2 font-jawi text-2xl md:text-3xl font-bold flex items-center gap-4 fade-in bg-red-50 text-red-700 border-red-200"; fbBox.innerHTML = '<i class="fas fa-times-circle text-4xl"></i> کيليرو! جواڤن اندا ساله.'; } } else fbBox.classList.add('hidden');
+    document.querySelectorAll('[id^="objBtn-"]').forEach(b => b.classList.remove('obj-nav-active')); const activeBtn = document.getElementById(`objBtn-${index}`); if(activeBtn) { activeBtn.classList.add('obj-nav-active'); activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    document.getElementById('obj-prevBtn').disabled = (index === 0); if (index === objectiveData.length - 1) { document.getElementById('obj-nextBtn').classList.add('hidden'); document.getElementById('obj-finishContainer').classList.remove('hidden'); } else { document.getElementById('obj-nextBtn').classList.remove('hidden'); document.getElementById('obj-finishContainer').classList.add('hidden'); }
+    const card = document.getElementById('obj-questionCard'); card.classList.remove('fade-in'); void card.offsetWidth; card.classList.add('fade-in'); document.getElementById('obj-scrollArea').scrollTo(0,0);
+}
+function selectObjAnswer(optIndex, qIndex) { userObjAnswers[qIndex] = optIndex; if (shuffledObjOptionsStore[qIndex][optIndex].isCorrect) correctObjCount++; document.getElementById('obj-scoreTracker').innerText = `مرکه: ${correctObjCount} / ${objectiveData.length}`; document.getElementById('obj-progressTracker').innerText = `دجواب: ${userObjAnswers.filter(a => a !== null).length}`; renderObjSidebar(); loadObjQuestion(qIndex); }
+
+function showFinalResult(mod) {
+    if(mod === 'obj') {
+        const answered = userObjAnswers.filter(a => a !== null).length; if (answered < objectiveData.length) { showModal("ڤرايڠتن", `اندا بارو منجواب ${answered}/${objectiveData.length} سوءالن. سيلا جواب سموا.`, 'fa-exclamation-triangle', 'text-amber-500'); toggleSidebar('obj'); return; }
+        let msg = correctObjCount >= (objectiveData.length * 0.8) ? "چمرلڠ! ممتاز!" : (correctObjCount >= (objectiveData.length * 0.6) ? "باءيق! تروسکن اوسها!" : "ڤرلو لبيه لاتيهن. جاڠن ڤوتوس اسا!");
+        document.getElementById('obj-questionCard').innerHTML = `<div class="p-12 text-center fade-in"><h2 class="font-jawi text-5xl md:text-6xl text-blue-800 font-bold mb-8">اوجين تمت!</h2><div class="text-6xl md:text-8xl font-bold text-green-600 mb-6 font-sans">${correctObjCount} / ${objectiveData.length}</div><p class="font-jawi text-4xl text-slate-700 font-bold mb-8">${msg}</p><p class="font-jawi text-2xl text-slate-500 mb-10 leading-loose">اندا بوليه مپيمق سموا جواڤن اندا ملالوءي مينو نافيݢاسي د سبله.</p><button onclick="switchView('home')" class="px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg transition-transform hover:scale-105 font-jawi text-3xl">کمبالي ک لامن اوتام <i class="fas fa-home mr-3"></i></button></div>`;
+        document.getElementById('obj-prevBtn').style.display = 'none'; document.getElementById('obj-finishContainer').style.display = 'none';
+    } else if (mod === 'tf') {
+        const answered = userTfAnswers.filter(a => a !== null).length; if (answered < trueFalseData.length) { showModal("ڤرايڠتن", `اندا بارو منجواب ${answered}/${trueFalseData.length} سوءالن. سيلا جواب سموا.`, 'fa-exclamation-triangle', 'text-amber-500'); toggleSidebar('tf'); return; }
+        let msg = correctTfCount >= (trueFalseData.length * 0.8) ? "چمرلڠ! ممتاز!" : (correctTfCount >= (trueFalseData.length * 0.6) ? "باءيق! تروسکن اوسها!" : "ڤرلو لبيه لاتيهن. جاڠن ڤوتوس اسا!");
+        document.getElementById('tf-questionCard').innerHTML = `<div class="p-12 text-center fade-in"><h2 class="font-jawi text-5xl md:text-6xl text-pink-800 font-bold mb-8">اوجين تمت!</h2><div class="text-6xl md:text-8xl font-bold text-green-600 mb-6 font-sans">${correctTfCount} / ${trueFalseData.length}</div><p class="font-jawi text-4xl text-slate-700 font-bold mb-8">${msg}</p><p class="font-jawi text-2xl text-slate-500 mb-10 leading-loose">اندا بوليه مپيمق سموا جواڤن اندا ملالوءي مينو نافيݢاسي د سبله.</p><button onclick="switchView('home')" class="px-10 py-5 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-2xl shadow-lg transition-transform hover:scale-105 font-jawi text-3xl">کمبالي ک لامن اوتام <i class="fas fa-home mr-3"></i></button></div>`;
+        document.getElementById('tf-prevBtn').style.display = 'none'; document.getElementById('tf-finishContainer').style.display = 'none';
+    }
+}
+
+function initStructured() { renderStrSidebar(); loadStrQuestion(0); strSidebarInitialized = true; }
+function renderStrSidebar() {
+    const menu = document.getElementById('str-sidebarMenu'); let currentTopic = ""; let menuHTML = "";
+    structuredData.forEach((item, index) => {
+        if(item.topic !== currentTopic) { if(currentTopic !== "") menuHTML += `</div></div>`; currentTopic = item.topic; menuHTML += `<div class="mb-2"><h4 class="font-jawi text-xl text-indigo-900 font-bold mb-2 bg-indigo-50 p-2 rounded border-r-4 border-indigo-400">${currentTopic}</h4><div class="grid grid-cols-5 gap-2 pr-2">`; }
+        menuHTML += `<button onclick="loadStrQuestion(${index})" id="strBtn-${index}" class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 font-bold hover:bg-indigo-100 transition-colors font-sans text-sm">${index + 1}</button>`;
+    }); menuHTML += `</div></div>`; menu.innerHTML = menuHTML;
+}
+function loadStrQuestion(index) {
+    if(index < 0 || index >= structuredData.length) return; currentStrIndex = index; const item = structuredData[index];
+    document.getElementById('str-questionText').innerText = item.q; document.getElementById('str-qNumberBadge').innerText = `سوءالن ${index + 1} / ${structuredData.length}`; document.getElementById('str-qCategoryBadge').innerText = item.topic.split(':')[1] ? item.topic.split(':')[1].trim().toUpperCase() : item.topic.toUpperCase(); document.getElementById('str-headerTopicIndicator').innerText = item.topic;
+    document.getElementById('str-answerBox').classList.add('hidden'); document.getElementById('str-revealBtn').classList.remove('hidden'); document.getElementById('str-userAnswer').value = ""; 
+    document.getElementById('str-answerText').innerText = item.a;
+    document.querySelectorAll('[id^="strBtn-"]').forEach(b => b.classList.remove('str-nav-active', 'bg-indigo-600', 'text-white', 'border-indigo-600')); const activeBtn = document.getElementById(`strBtn-${index}`); if(activeBtn) { activeBtn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600'); activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    document.getElementById('str-prevBtn').disabled = (index === 0); document.getElementById('str-nextBtn').innerHTML = index === structuredData.length - 1 ? 'تمت <i class="fas fa-flag-checkered"></i>' : 'ستروسڽ <i class="fas fa-arrow-left"></i>';
+    const card = document.getElementById('str-questionCard'); card.classList.remove('fade-in'); void card.offsetWidth; card.classList.add('fade-in'); document.getElementById('str-scrollArea').scrollTo(0,0);
+}
+function revealStrAnswer() { document.getElementById('str-answerBox').classList.remove('hidden'); document.getElementById('str-revealBtn').classList.add('hidden'); }
+
+function initTrueFalse() {
+    userTfAnswers = new Array(trueFalseData.length).fill(null); correctTfCount = 0;
+    renderTfSidebar(); loadTfQuestion(0); tfInitialized = true;
+}
+function renderTfSidebar() {
+    const menu = document.getElementById('tf-sidebarMenu'); let currentTopic = ""; let menuHTML = "";
+    trueFalseData.forEach((item, index) => {
+        if(item.topic !== currentTopic) { if(currentTopic !== "") menuHTML += `</div></div>`; currentTopic = item.topic; menuHTML += `<div class="mb-2"><h4 class="font-jawi text-xl text-pink-900 font-bold mb-3 bg-pink-50 p-2 rounded border-r-4 border-pink-400">${currentTopic}</h4><div class="grid grid-cols-5 gap-2 pr-2">`; }
+        let btnClass = "border-slate-200 text-slate-600 hover:bg-pink-100 bg-white"; if (userTfAnswers[index] !== null) btnClass = userTfAnswers[index] === trueFalseData[index].a ? "border-green-500 bg-green-500 text-white" : "border-red-500 bg-red-500 text-white";
+        menuHTML += `<button onclick="loadTfQuestion(${index})" id="tfBtn-${index}" class="w-10 h-10 flex items-center justify-center rounded-lg border-2 font-bold transition-all font-sans text-sm ${btnClass}">${index + 1}</button>`;
+    }); menuHTML += `</div></div>`; menu.innerHTML = menuHTML;
+}
+function loadTfQuestion(index) {
+    if(index < 0 || index >= trueFalseData.length) return; currentTfIndex = index; const item = trueFalseData[index];
+    document.getElementById('tf-questionText').innerText = item.q; document.getElementById('tf-qNumberBadge').innerText = `سوءالن ${index + 1} / ${trueFalseData.length}`; document.getElementById('tf-qCategoryBadge').innerText = item.topic.split(':')[1] ? item.topic.split(':')[1].trim().toUpperCase() : item.topic.toUpperCase(); document.getElementById('tf-headerTopicIndicator').innerText = item.topic;
+    const isAnswered = userTfAnswers[index] !== null; const fbBox = document.getElementById('tf-feedbackBox'); const btnTrue = document.getElementById('tf-btn-true'); const btnFalse = document.getElementById('tf-btn-false'); btnTrue.disabled = false; btnFalse.disabled = false;
+    btnTrue.className = "tf-option-btn w-full py-8 px-6 bg-white border-4 border-emerald-100 text-emerald-600 hover:border-emerald-500 hover:bg-emerald-50 rounded-3xl font-bold flex flex-col items-center gap-4 transition-all"; btnFalse.className = "tf-option-btn w-full py-8 px-6 bg-white border-4 border-rose-100 text-rose-600 hover:border-rose-500 hover:bg-rose-50 rounded-3xl font-bold flex flex-col items-center gap-4 transition-all";
+    if (isAnswered) {
+        btnTrue.disabled = true; btnFalse.disabled = true; btnTrue.classList.add('disabled-option', 'cursor-not-allowed'); btnFalse.classList.add('disabled-option', 'cursor-not-allowed'); const userAnswer = userTfAnswers[index]; const correctAns = item.a;
+        if (userAnswer === true) { if (correctAns === true) btnTrue.classList.add('tf-correct-ans'); else { btnTrue.classList.add('tf-wrong-ans'); btnFalse.classList.add('tf-correct-ans'); btnFalse.classList.remove('disabled-option'); } } else { if (correctAns === false) btnFalse.classList.add('tf-correct-ans'); else { btnFalse.classList.add('tf-wrong-ans'); btnTrue.classList.add('tf-correct-ans'); btnTrue.classList.remove('disabled-option'); } }
+        fbBox.classList.remove('hidden'); if (userAnswer === correctAns) { fbBox.className = "mt-12 p-6 rounded-2xl border-2 font-jawi text-2xl md:text-3xl font-bold flex items-center justify-center gap-4 fade-in bg-green-50 text-green-700 border-green-200"; fbBox.innerHTML = '<i class="fas fa-check-circle text-4xl"></i> تڤت سکالي!'; } else { fbBox.className = "mt-12 p-6 rounded-2xl border-2 font-jawi text-2xl md:text-3xl font-bold flex items-center justify-center gap-4 fade-in bg-red-50 text-red-700 border-red-200"; fbBox.innerHTML = '<i class="fas fa-times-circle text-4xl"></i> کيليرو! جواڤن اندا ساله.'; }
+    } else fbBox.classList.add('hidden');
+    document.querySelectorAll('[id^="tfBtn-"]').forEach(b => b.classList.remove('tf-nav-active')); const activeBtn = document.getElementById(`tfBtn-${index}`); if(activeBtn) { activeBtn.classList.add('tf-nav-active'); activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    document.getElementById('tf-prevBtn').disabled = (index === 0); if (index === trueFalseData.length - 1) { document.getElementById('tf-nextBtn').classList.add('hidden'); document.getElementById('tf-finishContainer').classList.remove('hidden'); } else { document.getElementById('tf-nextBtn').classList.remove('hidden'); document.getElementById('tf-finishContainer').classList.add('hidden'); }
+    const card = document.getElementById('tf-questionCard'); card.classList.remove('fade-in'); void card.offsetWidth; card.classList.add('fade-in'); document.getElementById('tf-scrollArea').scrollTo(0,0);
+}
+function selectTfAnswer(answer) { userTfAnswers[currentTfIndex] = answer; if (answer === trueFalseData[currentTfIndex].a) correctTfCount++; document.getElementById('tf-scoreTracker').innerText = `مرکه: ${correctTfCount} / ${trueFalseData.length}`; document.getElementById('tf-progressTracker').innerText = `دجواب: ${userTfAnswers.filter(a => a !== null).length}`; renderTfSidebar(); loadTfQuestion(currentTfIndex); }
+
+// MIND MAP LOGIC
+let mmScale = 1; let mmPanX = 0; let mmPanY = 0; let isPanning = false; let startX, startY; let initialPinchDistance = null; let initialScale = 1;
+function renderMindMap(topicIndex) {
+    const data = mindMapData[topicIndex]; const wrapper = document.getElementById('mm-nodes-wrapper'); const svg = document.getElementById('mm-svg'); 
+    wrapper.innerHTML = ''; svg.innerHTML = ''; resetMindMap(); if (!data) return;
+    const treeDOM = buildMindMapNode(data, "root"); wrapper.appendChild(treeDOM);
+    setTimeout(() => { drawMindMapLines(); }, 50);
+}
+function buildMindMapNode(nodeData, idPrefix) {
+    const container = document.createElement('div'); container.className = 'flex flex-col items-center gap-8 relative';
+    const nodeEl = document.createElement('div'); nodeEl.className = `node-level-${nodeData.level} relative z-10`; nodeEl.innerText = nodeData.text; nodeEl.id = `node-${idPrefix}`; container.appendChild(nodeEl);
+    if (nodeData.children && nodeData.children.length > 0) {
+        const childrenWrapper = document.createElement('div'); childrenWrapper.className = 'flex flex-row justify-center items-start gap-6 md:gap-12 pt-6 relative w-max'; childrenWrapper.dataset.parentId = nodeEl.id;
+        nodeData.children.forEach((child, index) => { const childTree = buildMindMapNode(child, `${idPrefix}-${index}`); childTree.dataset.childOf = nodeEl.id; childrenWrapper.appendChild(childTree); });
+        container.appendChild(childrenWrapper);
+    } return container;
+}
+function drawMindMapLines() {
+    const svg = document.getElementById('mm-svg'); svg.innerHTML = ''; const wrapperRect = document.getElementById('mm-transform-layer').getBoundingClientRect();
+    document.querySelectorAll('[data-child-of]').forEach(container => {
+        const parentEl = document.getElementById(container.dataset.childOf); const childEl = container.querySelector('[id^="node-"]'); if (!parentEl || !childEl) return;
+        const pRect = parentEl.getBoundingClientRect(); const cRect = childEl.getBoundingClientRect();
+        const pX = (pRect.left + (pRect.width / 2) - wrapperRect.left) / mmScale; const pY = (pRect.bottom - wrapperRect.top) / mmScale;
+        const cX = (cRect.left + (cRect.width / 2) - wrapperRect.left) / mmScale; const cY = (cRect.top - wrapperRect.top) / mmScale;
+        const path = document.createElementNS('http://www.w3.org/2000/svg','path'); const curveOffset = Math.abs(cY - pY) / 2;
+        path.setAttribute('d', `M ${pX} ${pY} C ${pX} ${pY + curveOffset}, ${cX} ${cY - curveOffset}, ${cX} ${cY}`); path.setAttribute('stroke', '#6ee7b7'); path.setAttribute('stroke-width', '4'); path.setAttribute('fill', 'none'); path.setAttribute('stroke-linecap', 'round'); svg.appendChild(path);
+    });
+}
+function zoomMindMap(delta, zoomPointX = null, zoomPointY = null) {
+    const oldScale = mmScale; mmScale += delta; if (mmScale < 0.2) mmScale = 0.2; if (mmScale > 3) mmScale = 3;   
+    if (zoomPointX !== null && zoomPointY !== null) { const scaleRatio = mmScale / oldScale; mmPanX = zoomPointX - (zoomPointX - mmPanX) * scaleRatio; mmPanY = zoomPointY - (zoomPointY - mmPanY) * scaleRatio; }
+    applyMindMapTransform();
+}
+function resetMindMap() { mmScale = 1; mmPanX = 0; mmPanY = 0; applyMindMapTransform(); }
+function applyMindMapTransform() { document.getElementById('mm-transform-layer').style.transform = `translate(${mmPanX}px, ${mmPanY}px) scale(${mmScale})`; }
+function getPinchDistance(touches) { const dx = touches[0].clientX - touches[1].clientX; const dy = touches[0].clientY - touches[1].clientY; return Math.sqrt(dx * dx + dy * dy); }
+function getPinchCenter(touches) { return { x: (touches[0].clientX + touches[1].clientX) / 2, y: (touches[0].clientY + touches[1].clientY) / 2 }; }
+
+const viewport = document.getElementById('mm-viewport');
+viewport.addEventListener('mousedown', (e) => { isPanning = true; startX = e.clientX - mmPanX; startY = e.clientY - mmPanY; viewport.style.cursor = 'grabbing'; });
+window.addEventListener('mousemove', (e) => { if (!isPanning) return; mmPanX = e.clientX - startX; mmPanY = e.clientY - startY; applyMindMapTransform(); });
+window.addEventListener('mouseup', () => { isPanning = false; viewport.style.cursor = 'grab'; });
+viewport.addEventListener('wheel', (e) => { e.preventDefault(); const delta = e.deltaY > 0 ? -0.1 : 0.1; const rect = viewport.getBoundingClientRect(); zoomMindMap(delta, e.clientX - rect.left, e.clientY - rect.top); }, { passive: false });
+viewport.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) { isPanning = true; startX = e.touches[0].clientX - mmPanX; startY = e.touches[0].clientY - mmPanY; } 
+    else if (e.touches.length === 2) { isPanning = false; initialPinchDistance = getPinchDistance(e.touches); initialScale = mmScale; }
+}, {passive: false});
+viewport.addEventListener('touchmove', (e) => {
+    e.preventDefault(); 
+    if (e.touches.length === 1 && isPanning) { mmPanX = e.touches[0].clientX - startX; mmPanY = e.touches[0].clientY - startY; applyMindMapTransform(); } 
+    else if (e.touches.length === 2 && initialPinchDistance !== null) {
+        const zoomIncrement = (getPinchDistance(e.touches) - initialPinchDistance) * 0.005; const center = getPinchCenter(e.touches); const rect = viewport.getBoundingClientRect();
+        const x = center.x - rect.left; const y = center.y - rect.top; const oldScale = mmScale; mmScale = initialScale + zoomIncrement;
+        if (mmScale < 0.2) mmScale = 0.2; if (mmScale > 3) mmScale = 3;   
+        if (mmScale !== oldScale) { const scaleRatio = mmScale / oldScale; mmPanX = x - (x - mmPanX) * scaleRatio; mmPanY = y - (y - mmPanY) * scaleRatio; applyMindMapTransform(); }
+    }
+}, {passive: false});
+viewport.addEventListener('touchend', (e) => { 
+    if (e.touches.length < 2) initialPinchDistance = null;
+    if (e.touches.length === 0) isPanning = false; 
+    else if (e.touches.length === 1) { startX = e.touches[0].clientX - mmPanX; startY = e.touches[0].clientY - mmPanY; isPanning = true; }
+});
+
+function initMatch() { matchInitialized = true; currentMatchLevel = 0; loadMatchLevel(); }
+function loadMatchLevel() {
+    if (currentMatchLevel >= matchData.length) { showModal("تهنيئه!", "اندا تله ملڠکڤکن کسموا 10 سيشن ڤادنن!", "fa-trophy", "text-amber-500"); switchView('home'); return; }
+    document.getElementById('match-progress').innerText = `سيشن ${currentMatchLevel + 1}/${matchData.length}`; document.getElementById('match-title').innerText = `سيشن ${currentMatchLevel + 1}`; document.getElementById('match-level-complete').classList.add('hidden'); document.getElementById('match-board').classList.remove('hidden'); document.getElementById('match-lines').innerHTML = '';
+    const pairs = matchData[currentMatchLevel]; matchedPairsCount = 0; selectedMatchLeft = null;
+    let leftItems = pairs.map((p, i) => ({ id: i, text: p.desc })); let rightItems = pairs.map((p, i) => ({ id: i, text: p.term }));
+    leftItems.sort(() => Math.random() - 0.5); rightItems.sort(() => Math.random() - 0.5);
+    const leftCol = document.getElementById('match-left-col'); const rightCol = document.getElementById('match-right-col'); leftCol.innerHTML = ''; rightCol.innerHTML = '';
+    leftItems.forEach(item => { const btn = document.createElement('div'); btn.className = 'match-card bg-white border-2 border-slate-200 rounded-xl p-4 md:p-6 font-jawi text-xl md:text-2xl text-slate-700 text-right h-full flex items-center justify-end'; btn.innerText = item.text; btn.dataset.id = item.id; btn.dataset.side = 'left'; btn.onclick = () => handleMatchClick(btn); leftCol.appendChild(btn); });
+    rightItems.forEach(item => { const btn = document.createElement('div'); btn.className = 'match-card bg-white border-2 border-slate-200 rounded-xl p-4 md:p-6 font-jawi text-xl md:text-2xl text-amber-700 font-bold text-center h-full flex items-center justify-center'; btn.innerText = item.text; btn.dataset.id = item.id; btn.dataset.side = 'right'; btn.onclick = () => handleMatchClick(btn); rightCol.appendChild(btn); });
+}
+function handleMatchClick(el) {
+    if (el.classList.contains('matched')) return;
+    if (el.dataset.side === 'left') { document.querySelectorAll('#match-left-col .match-card').forEach(c => c.classList.remove('selected')); el.classList.add('selected'); selectedMatchLeft = el; } 
+    else if (el.dataset.side === 'right') {
+        if (!selectedMatchLeft) { showModal("ڤرايڠتن", "سيلا ڤيليه کترڠن د سبله کيري ترلبيه دهولو.", "fa-hand-pointer", "text-amber-500"); return; }
+        const rightId = el.dataset.id; const leftId = selectedMatchLeft.dataset.id;
+        if (rightId === leftId) {
+            el.classList.add('matched'); selectedMatchLeft.classList.remove('selected'); selectedMatchLeft.classList.add('matched'); drawMatchLine(selectedMatchLeft, el); selectedMatchLeft = null; matchedPairsCount++;
+            if (matchedPairsCount === matchData[currentMatchLevel].length) { setTimeout(() => { document.getElementById('match-board').classList.add('hidden'); document.getElementById('match-level-complete').classList.remove('hidden'); }, 800); }
+        } else { el.classList.add('error'); setTimeout(() => el.classList.remove('error'), 400); }
+    }
+}
+function drawMatchLine(leftEl, rightEl) {
+    const svg = document.getElementById('match-lines'); const boardRect = document.getElementById('match-board').getBoundingClientRect();
+    const lRect = leftEl.getBoundingClientRect(); const rRect = rightEl.getBoundingClientRect();
+    const x1 = lRect.left - boardRect.left; const y1 = lRect.top + (lRect.height/2) - boardRect.top; const x2 = rRect.right - boardRect.left; const y2 = rRect.top + (rRect.height/2) - boardRect.top; 
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line'); line.setAttribute('x1', x1); line.setAttribute('y1', y1); line.setAttribute('x2', x2); line.setAttribute('y2', y2); line.setAttribute('stroke', '#34d399'); line.setAttribute('stroke-width', '3'); line.setAttribute('stroke-dasharray', '5,5'); svg.appendChild(line);
+}
+function nextMatchLevel() { currentMatchLevel++; loadMatchLevel(); }
+
+</script>
+</body>
+</html>
